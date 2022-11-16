@@ -11,13 +11,45 @@ export class FireService {
     rut: 'a'
   };
   //Crud firebase
-  agregar (coleccion, usuario){
+  async agregar(coleccion, value, id){
     try {
-       this.fire.collection(coleccion).add(this.usuario);
-       return true
-        }catch(error) {
-       console.log(error)
-       }
-       return false
+      await this.fire.collection(coleccion).doc(id).set(value);
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+  async getDatos(coleccion){
+    try {
+      return await this.fire.collection(coleccion).snapshotChanges();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async eliminar(coleccion, id){
+    try {
+      await this.fire.collection(coleccion).doc(id).delete();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getDato(coleccion, id){
+    try {
+      return  await this.fire.collection(coleccion).doc(id).get();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async modificar(coleccion, id, value){
+    try {
+      await this.fire.collection(coleccion).doc(id).set(value);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
 }

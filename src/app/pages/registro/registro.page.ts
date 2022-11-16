@@ -66,8 +66,8 @@ export class RegistroPage implements OnInit {
 
     }
     this.alumno.controls.id.setValue(v4());
-    var guardar = await this.fireService.agregar(this.KEY, this.alumno.value);
-    /* var guardar = await this.storage.agregar(this.KEY, this.alumno.value); */
+
+     var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
 
     if (guardar == true) {
       /*correo = this.usuarioService.obtenerUsuario(this.alumno.controls.rut.value); Para otra version */

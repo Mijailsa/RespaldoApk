@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage-angular';
 import { BehaviorSubject } from 'rxjs';
 import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import { JsonPipe } from '@angular/common';
+import { FireService } from '../services/fire.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class StorageService {
   nvoDato: any[] = [];
   isAuthenticated = new BehaviorSubject(false);
   userAdmin: any[] = [];
-  constructor(private storage: Storage, private router: Router) {
+  constructor(private storage: Storage, private router: Router, private fireStore: FireService) {
     storage.create();
   }
 
@@ -25,6 +26,9 @@ export class StorageService {
     if (existe == undefined) {
       this.datos.push(dato);
       await this.storage.set(key, this.datos);
+      let nvoId = dato.id;
+      await this.fireStore.agregar(key, dato, nvoId);
+
       return true;
     }
     return false;
@@ -213,9 +217,9 @@ export class StorageService {
        this.datos = await this.storage.get(key) || [];
   return this.datos.find(dato=> dato.id ==identificador )
    }
- 
 
-   
+
+
   async eliminarPasajero(key, identificador, rutPasajero) {
     this.datos = await this.storage.get(key) || []
 
@@ -228,22 +232,22 @@ export class StorageService {
             this.nvoDato.splice(indice,1);
             value.pasajeros = this.nvoDato;
         }});
-        
+
       }
-      
+
     }
     );
     await this.storage.set(key, this.datos);
   }
   /*  async eliminar(key, identificador) {
      this.datos = await this.storage.get(key) || [];
- 
+
      this.datos.forEach((value, index) => {
        if (value.rut == identificador) {
          this.datos.splice(index, 1);
        }
      });
- 
+
      await this.storage.set(key, this.datos);
    } */
 }

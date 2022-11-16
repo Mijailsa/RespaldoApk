@@ -1,0 +1,75 @@
+<ion-content>
+  <div class="fondo" *ngIf="template == 1">
+    <h1 class="titulo">
+      Solicitudes de viajes
+    </h1>
+
+    <ion-list lines="none" id="lista" *ngFor="let aux of solicitud; let i = index" [attr.data-index]="i">
+      <ion-item class="item" *ngIf="solicitud != 'n' && solicitud != 'i' && solicitud != 's' ">
+
+
+        <ion-grid>
+          <ion-row class="chato">
+            <ion-col size="6" class="ion-align-self-start">
+              <div>
+                <img src="../../../assets/img/Rayo_McQueen.webp" alt="">
+              </div>
+            </ion-col>
+            <ion-col size="6" class="Fuentes">
+              <div>
+                <b>Rut</b>: {{solicitud[i]}}
+                <ion-button (click)="eliminarPasajeros(solicitud[i],usuario.rut)">
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+    <div>
+      <ion-button (click)="iniciarViaje()">
+        Iniciar
+        <ion-icon name="car" slot="end"></ion-icon>
+      </ion-button>
+      <ion-button (click)="finalizarViaje(4)">
+        Cancelar
+        <ion-icon name="nuclear" slot="end"></ion-icon>
+      </ion-button>
+      <ion-button (click)="generarQr()">
+        Mostrar QR
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+  <div class="fondo-recorrido" *ngIf="template == 2">
+    <div id="map">
+    </div>
+    <ion-button (click)="finalizarViaje(3)">
+      Finalizar
+    </ion-button>
+  </div>
+  <div class="fondo-finalizado" *ngIf="template == 3">
+    <img src="https://thumbs.dreamstime.com/b/marca-finalizada-signo-de-redondeo-finalizado-etiqueta-198277036.jpg"
+      alt="">
+  </div>
+  <div class="fondo-finalizado" *ngIf="template == 4">
+    <img
+      src="https://img.freepik.com/vector-premium/banner-sello-cancelado-rojo-sobre-fondo-transparente-diseno-eps-textura-grunge-diseno-vectorial_123447-3282.jpg"
+      alt="">
+  </div>
+  <div class="fondo-qr" *ngIf="template ==5">
+    <div class="qr">
+      <ngx-qrcode [elementType]="elementType" [value]="value_qr">
+      </ngx-qrcode>
+    </div>
+    <div class="volver">
+      <p>{{mostrar_qr}}</p>
+      <ion-button (click)="volverMenu()">
+        Volver
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

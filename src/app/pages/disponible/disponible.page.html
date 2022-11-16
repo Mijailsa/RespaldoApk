@@ -1,0 +1,86 @@
+<ion-content>
+  <div class="fondo" *ngIf="template == 1">
+    <h1 class="titulo">{{titulo}}</h1>
+    <ion-list lines="none" id="lista" *ngFor="let aux of total">
+      <ion-item class="item">
+        <div>
+          <img alt="Silhouette of mountains" src="{{aux.dato.vehiculo.imagen}}" />
+        </div>
+        <ion-button slot="end" size="default" (click)="irDetalle(aux.dato.rut)">
+          ir Detalle
+          <ion-icon name="information-circle" slot="end"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-item class="item">
+        <h1>{{aux.dato.nombre}} {{aux.dato.apellido}}</h1>
+      </ion-item>
+      <ion-item class="item">
+        <h3>Marca: {{aux.dato.vehiculo.marca}} {{aux.dato.vehiculo.modelo}}</h3>
+      </ion-item>
+      <ion-item class="item">
+        <h5>Precio: $ {{aux.precios.precio}}</h5>
+      </ion-item>
+    </ion-list>
+    <ion-button size="default" (click)="irQr()">
+      Leer Qr
+      <ion-icon name="qr-code-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <div class="fondo-detalle" *ngIf="template == 2">
+    <div class="formularioViaje">
+      <div id="map"></div>
+      <ion-item class="imagen">
+        <img class="image" src="{{detalle.dato.vehiculo.imagen}}" alt="">
+      </ion-item>
+      <ion-item>
+        <div>CONDUCTOR: {{detalle.dato.nombre}} {{detalle.dato.apellido}}</div>
+      </ion-item>
+      <ion-item>
+        <div>CORREO: {{detalle.dato.correo}}</div>
+      </ion-item>
+      <ion-item>
+        <div>PASAJEROS: {{detalle.dato.vehiculo.pasajeros}}</div>
+      </ion-item>
+      <ion-item *ngIf="detalle.precios.capacidad != 0">
+        <div>DISPONIBLE: {{detalle.precios.capacidad}} pasajeros restantes</div>
+      </ion-item>
+      <ion-item *ngIf="detalle.precios.capacidad == 0">
+        <div>DISPONIBLE: Sin cupo</div>
+      </ion-item>
+      <ion-item>
+        <div>PRECIO: $ {{detalle.precios.precio}} pesos</div>
+      </ion-item>
+      <ion-item>
+        <div>HORA SALIDA: {{detalle.precios.salida}} horas</div>
+      </ion-item>
+      <div>
+
+        <ion-button slot="end" size="default" (click)="irViajes()">
+          Volver
+          <ion-icon name="play-back-outline" slot="end"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="detalle.precios.capacidad != 0" slot="end" size="default"
+          (click)="irSolicitar(detalle.precios.rut_conductor)">
+          Solicitar
+          <ion-icon name="enter-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+  <div class="fondo-leer" *ngIf="template == 3">
+    <ion-item>
+      <ion-input [(ngModel)]="idViajes" placeholder="Inserte identificador pasaje."></ion-input>
+    </ion-item>
+    
+    <div class="botones-qr">
+      <ion-button size="default" (click)="leerQr()">
+        Leer
+        <ion-icon name="book-outline"></ion-icon>
+      </ion-button>
+      <ion-button slot="end" size="default" (click)="irViajes()">
+        Volver
+        <ion-icon name="play-back-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

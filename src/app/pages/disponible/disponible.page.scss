@@ -1,0 +1,238 @@
+.fondo-leer{
+  box-shadow: none;
+  height: 100vh;
+  background: transparentize($color: #f0e658bd, $amount: 0.3);
+  background: url("../../../assets/img/fondo.jpg");
+  background-size: cover;
+  text-align: center;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Montserrat";
+  overflow: scroll;
+  ion-item {
+    margin-top: 12.5vh;
+    --background: none;
+    ion-input{
+        font-family: 'Lobster';
+        color: rgba(4, 4, 43, 0.904);
+    }
+    
+}
+  .botones-qr{
+    margin-top: 10vh;
+    ion-button {
+      color: rgba(4, 4, 43, 0.904);
+      margin-top: 2vh;
+      margin-bottom: 2vh;
+      font-family: "Montserrat";
+      --background: transparentize($color: #1e7065cb, $amount: 0.3);
+      font-weight: bold;
+    }
+  }
+
+}
+.fondo {
+  box-shadow: none;
+  height: 100vh;
+
+  background: transparentize($color: #f0e658bd, $amount: 0.3);
+  background: url("../../../assets/img/fondo.jpg");
+  background-size: cover;
+  text-align: center;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Montserrat";
+  overflow: scroll;
+
+  .titulo {
+    margin-top: 12.5vh;
+    font-family: Lobster;
+    color: rgb(34, 22, 1);
+    margin-bottom: 3vh;
+  }
+  #lista {
+    background: none;
+    background: linear-gradient(#748ddf, rgba(190, 104, 17, 0.133));
+    border-bottom: solid;
+    border-top: solid;
+    border-color: white;
+    ion-thumbnail img {
+      width: 70px !important;
+      height: 70px !important;
+    }
+    .item {
+      --background: none;
+      color: rgb(34, 22, 1);
+      font-weight: bold;
+      font-family: Lobster;
+      div {
+        height: 12.5vh;
+        img {
+          width: 75px;
+          height: auto;
+        }
+      }
+    }
+    ion-button {
+      color: rgba(4, 4, 43, 0.904);
+      margin-top: 2vh;
+      margin-bottom: 2vh;
+      font-family: "Montserrat";
+      --background: transparentize($color: #1e7065cb, $amount: 0.3);
+      font-weight: bold;
+    }
+  }
+}
+#map {
+  margin-top: 10vh;
+  width: 100%;
+  height: 40%;
+  display: block;
+  border-radius: 5px;
+  border-bottom: solid;
+  border-color: #9634c1;
+  border-radius: 5px;
+}
+#indicaciones {
+  width: 100%;
+  height: 40%;
+  padding: 10px;
+  overflow-y: auto;
+  display: block;
+}
+.fondo-detalle {
+  box-shadow: none;
+  height: 100vh;
+  background: rgb(238, 174, 202);
+  background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  background-size: cover;
+  text-align: center;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Montserrat";
+  overflow: scroll;
+  .formularioViaje {
+    text-align: center;
+    height: 80vh;
+    border-radius: 5px;
+    ion-item {
+      width: 85vw;
+      --background: none;
+      color: rgb(2, 2, 2);
+    }
+    .imagen {
+      margin-top: 3vh;
+      width: 100vw;
+      .image {
+        width: 100vw;
+        height: auto;
+        border-radius: 15px;
+        border: solid;
+        border-color: white;
+      }
+    }
+    #inicio {
+      color: rgb(5, 5, 5);
+      background: none;
+      border: none;
+    }
+    #autocomplete {
+      color: rgb(65, 45, 9);
+      background: none;
+      border: none;
+    }
+
+    ion-button {
+      color: rgba(4, 4, 43, 0.904);
+      margin-top: 2vh;
+      margin-bottom: 2vh;
+      font-family: "Montserrat";
+      --background: transparentize($color: #1e7065cb, $amount: 0.3);
+      font-weight: bold;
+    }
+  }
+}
+
+/*.recuperacion{
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url("../../../assets/img/campus-arauco4-960x529.jpg");
+  background-size: cover;
+  text-align: center;
+  font-family: 'Montserrat';
+}
+
+.caja1 {
+  background-color: #1e7065cb;
+  width: 300px;
+  height: 300px;
+  float: left;
+}
+ion-content.background{
+  --background: url("../../../assets/img/fondo.jpg");
+}
+
+ion-list{
+  width: 80vw;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  text-align: center;
+  background-image: url("../../../assets/img/fondo.jpg");
+  height: 100vh;
+}
+
+ion-item{
+  $item-ios-body-text-font-size:	2rem;
+  font-family: 'Lobster';
+  font-weight: bold;
+  color: rgba(4, 4, 43, 0.904);
+  
+}
+
+div{
+  background: linear-gradient(rgba(255,165,0,0.6), rgba(223, 164, 116, 0.3) );
+  display: flex;
+  flex-direction: column;
+  
+}*/
+
+// div {
+//   background: linear-gradient(rgba(255,165,0,0.6), rgba(223, 164, 116, 0.3) );
+//   top: 5vh;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-around;
+
+//   ion-card {
+//     background: linear-gradient(#dfa474, rgba(153, 153, 50, 0.5) );
+//     margin: 0 auto;
+//     top: 5vh;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     justify-self: center;
+//     align-self: center;
+//     width: 70vw;
+//     height: 80vh;
+
+//       ion-item {
+//         --background: none;
+
+//         b {
+//           text-decoration: none;
+//           font-size: large;
+//           font-family: 'Lobster';
+//           font-weight: bold;
+//           color: rgba(4, 4, 43, 0.904);
+
+//         }
+//       }
+//     }
+//   }
+
+/*
+.grid {
+  display: grid;
+  grid-gap: 50px;
+  grid-column-gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}*/

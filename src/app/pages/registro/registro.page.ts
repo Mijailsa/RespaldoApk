@@ -5,6 +5,7 @@ import { ToastController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { v4 } from 'uuid';
+import { FireService } from 'src/app/services/fire.service';
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.page.html',
@@ -32,8 +33,11 @@ export class RegistroPage implements OnInit {
   KEY: any = "usuarios";
   validar_correo: any
   verificar_password: string;
-  alert:any;
-  constructor(private usuarioService: UsuarioService, private router: Router, private storage: StorageService, private toastcontroller: ToastController) { }
+  alert: any;
+  constructor(private usuarioService: UsuarioService, private router: Router,
+    private storage: StorageService,
+    private toastcontroller: ToastController,
+    private fireService: FireService) { }
 
   ngOnInit() {
   }
@@ -46,34 +50,36 @@ export class RegistroPage implements OnInit {
     let resta = anioActual - edadUsuario;
     /*alert(anioActual);*/
     if (!this.usuarioService.validarRut(this.alumno.controls.rut.value)) {
-      this.alert='¡RUT INCORRECTO!';
+      this.alert = '¡RUT INCORRECTO!';
       await this.toastError(this.alert);
       return;
     }
     if (resta < 17) {
-      this.alert='¡MAYOR DE 17 AÑOS!';
+      this.alert = '¡MAYOR DE 17 AÑOS!';
       await this.toastError(this.alert);
       return;
     }
     if (this.alumno.controls.password.value != this.verificar_password) {
-      this.alert='¡CONTRASEÑAS NO COINCIDEN!';
+      this.alert = '¡CONTRASEÑAS NO COINCIDEN!';
       await this.toastError(this.alert);
       return;
 
     }
     this.alumno.controls.id.setValue(v4());
-    var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
+    var guardar = await this.fireService.agregar(this.KEY, this.alumno.value);
+    /* var guardar = await this.storage.agregar(this.KEY, this.alumno.value); */
+
     if (guardar == true) {
       /*correo = this.usuarioService.obtenerUsuario(this.alumno.controls.rut.value); Para otra version */
       this.alumno.reset();
       /* this.verificar_password ='' ; */
-      this.alert ='¡USUARIO REGISTRADO!';
+      this.alert = '¡USUARIO REGISTRADO!';
       await this.toastError(this.alert);
       this.router.navigate(['/login']);
 
     }
     else {
-      this.alert='¡USUARIO YA EXISTE!'
+      this.alert = '¡USUARIO YA EXISTE!'
       await this.toastError(this.alert);
       this.router.navigate(['/registro']);
     }

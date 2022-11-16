@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: "AIzaSyBUHrxi5U87Td4qWgUy5uuqgJxbiUP0B3g",
     authDomain: "tellevoappomegaedition.firebaseapp.com",
     projectId: "tellevoappomegaedition",

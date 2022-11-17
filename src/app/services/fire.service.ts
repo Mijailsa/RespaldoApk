@@ -19,9 +19,9 @@ export class FireService {
     }
   }
 
-  async getDatos(coleccion){
+  getDatos(coleccion){
     try {
-      return await this.fire.collection(coleccion).snapshotChanges();
+      return this.fire.collection(coleccion).snapshotChanges();
     } catch (error) {
       console.log(error);
     }
@@ -35,9 +35,9 @@ export class FireService {
     }
   }
 
-  async getDato(coleccion, id){
+ getDato(coleccion, id){
     try {
-      return  await this.fire.collection(coleccion).doc(id).get();
+      return this.fire.collection(coleccion).doc(id).get();
     } catch (error) {
       console.log(error);
     }

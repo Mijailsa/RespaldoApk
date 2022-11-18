@@ -23,48 +23,32 @@ export class LoginPage implements OnInit {
     private usuarioService: UsuarioService, private route: ActivatedRoute, private navCtrl: NavController,
     private storage: StorageService, private loading: LoadingController, private fireStore: FireService) { }
 
-  ngOnInit() {
-  }
+ async ngOnInit() {
 
-  async login() {
-    console.log(0);
-    await this.storage.validarLogin(this.KEY, this.rut, this.password);
-    await this.fireStore.getDatos(this.KEY).subscribe(
+    this.fireStore.getDatos(this.KEY).subscribe(
       data => {
         for (let usuario of data) {
           let usu = usuario.payload.doc.data();
           usu['id'] = usuario.payload.doc.id;
           this.objectValidar.push(usu);
-          console.log(usu['id']);
-          console.log(usuario.payload.doc.id);
         }
-        var login = this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
+      }
+    );
+    await this.esperaEvento();
+  }
 
-        if (login != undefined) {
-          console.log("deberia logear");
-
-          this.cargarPantalla();
-          console.log("deberia logear");
-          this.nuevorut = this.rut;
-          this.password = '';
-          this.rut = '';
-
-          this.objectValidar.forEach(element => {
-            this.fireStore.getDato('usuarios', element.id).subscribe(
-              (response: any) => {
-                //console.log( response.data() );
-                var sesion: any;
-                sesion.setValue(response.data());
-                this.navCtrl.navigateForward(['/home/', this.nuevorut]);
-              }
-            );
-          });
-        } else {
-          this.toastError();
-        }
-
-      });
-
+  async login() {
+    await this.storage.validarLogin(this.KEY, this.rut, this.password);
+    var login = this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
+    if (login != undefined) {
+      await this.cargarPantalla();
+      this.nuevorut = this.rut;
+      this.password = '';
+      this.rut = '';
+      this.navCtrl.navigateForward(['/home/', this.nuevorut]);
+    } else {
+      await this.toastError();
+    }
   }
 
   async toastError() {
@@ -82,6 +66,16 @@ export class LoginPage implements OnInit {
       {
         message: 'Ingresando...',
         duration: 1000
+      }
+    );
+    cargando.present();
+  }
+
+  async esperaEvento(){
+    const cargando = await this.loading.create(
+      {
+        message: 'Cargando...',
+        duration: 3000
       }
     );
     cargando.present();

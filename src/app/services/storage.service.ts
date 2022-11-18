@@ -51,20 +51,7 @@ export class StorageService {
   }
 
   async getDato(key, identificador) {
-
-    this.fireStore.getDato(key, identificador).subscribe(
-      (response: any) => {
-        //console.log( response.data() );
-        let usuario: any = {
-
-        }
-        usuario.setValue(response.data());
-        return usuario;
-      }
-    );
-
     this.datos = await this.storage.get(key) || [];
-
     return this.datos.find(dato => dato.rut == identificador);
   }
 
@@ -190,81 +177,82 @@ export class StorageService {
         else {
           console.log(3);
           return undefined;
-        }}
+        }
+      }
     );
-  /* var login = this.datos.find(usu => usu.rut == rut && usu.password == password); */
+    /* var login = this.datos.find(usu => usu.rut == rut && usu.password == password); */
 
-}
+  }
 
-getAuth() {
-  return this.isAuthenticated.value;
-}
+  getAuth() {
+    return this.isAuthenticated.value;
+  }
 
-logout() {
-  this.isAuthenticated.next(false);
-  this.router.navigate(['/login']);
-}
+  logout() {
+    this.isAuthenticated.next(false);
+    this.router.navigate(['/login']);
+  }
 
   async getPasajeros(key, conductor) {
-  this.datos = await this.storage.get(key) || [];
-  var dato = this.datos.find(dato => dato.viaje.rut_conductor == conductor);
-}
-  async existeAdmin() {
-  var id = '0';
-  this.datos = await this.storage.get("usuarios") || [];
-  var existe = this.datos.find(admin => admin.id == id);
-  if (existe == undefined) {
-    console.log("crealo");
-    this.datos = [{
-      id: '0',
-      rut: '20763231-7',
-      nombre: 'Jose',
-      apellido: 'Contreras',
-      correo: 'rolando.hernandezv@duocuc.cl',
-      fecha_nac: '01/04/2002',
-      auto: 'no',
-      vehiculo: 'undefined',
-      password: '12341234',
-      tipo_usuario: 'administrador'
-    }];
-    await this.storage.set("usuarios", this.datos);
-    return false;
+    this.datos = await this.storage.get(key) || [];
+    var dato = this.datos.find(dato => dato.viaje.rut_conductor == conductor);
   }
-  return true;
+  async existeAdmin() {
+    var id = '0';
+    this.datos = await this.storage.get("usuarios") || [];
+    var existe = this.datos.find(admin => admin.id == id);
+    if (existe == undefined) {
+      console.log("crealo");
+      this.datos = [{
+        id: '0',
+        rut: '20763231-7',
+        nombre: 'Jose',
+        apellido: 'Contreras',
+        correo: 'rolando.hernandezv@duocuc.cl',
+        fecha_nac: '01/04/2002',
+        auto: 'no',
+        vehiculo: 'undefined',
+        password: '12341234',
+        tipo_usuario: 'administrador'
+      }];
+      await this.storage.set("usuarios", this.datos);
+      return false;
+    }
+    return true;
 
-}
+  }
   async getDatoViaje(key, identificador) {
-  this.datos = await this.storage.get(key) || [];
-  return this.datos.find(dato => dato.rut_conductor == identificador);
-}
+    this.datos = await this.storage.get(key) || [];
+    return this.datos.find(dato => dato.rut_conductor == identificador);
+  }
 
   async getListaSolicitudes(key, identificador,) {
-  this.datos = await this.storage.get(key) || [];
-  return this.datos.find(dato => dato.id == identificador)
-}
+    this.datos = await this.storage.get(key) || [];
+    return this.datos.find(dato => dato.id == identificador)
+  }
 
 
 
   async eliminarPasajero(key, identificador, rutPasajero) {
-  this.datos = await this.storage.get(key) || []
+    this.datos = await this.storage.get(key) || []
 
-  this.datos.forEach((value, index) => {
-    if (value.rut_conductor == identificador) {
-      this.nvoDato = value.pasajeros;
+    this.datos.forEach((value, index) => {
+      if (value.rut_conductor == identificador) {
+        this.nvoDato = value.pasajeros;
 
-      this.nvoDato.forEach((pasaje, indice) => {
-        if (pasaje == rutPasajero) {
-          this.nvoDato.splice(indice, 1);
-          value.pasajeros = this.nvoDato;
-        }
-      });
+        this.nvoDato.forEach((pasaje, indice) => {
+          if (pasaje == rutPasajero) {
+            this.nvoDato.splice(indice, 1);
+            value.pasajeros = this.nvoDato;
+          }
+        });
+
+      }
 
     }
-
+    );
+    await this.storage.set(key, this.datos);
   }
-  );
-  await this.storage.set(key, this.datos);
-}
   /*  async eliminar(key, identificador) {
      this.datos = await this.storage.get(key) || [];
 

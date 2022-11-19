@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { v4 } from 'uuid';
@@ -34,15 +34,31 @@ export class RegistroPage implements OnInit {
   validar_correo: any
   verificar_password: string;
   alert: any;
+  datos: any = [];
   constructor(private usuarioService: UsuarioService, private router: Router,
     private storage: StorageService,
     private toastcontroller: ToastController,
-    private fireService: FireService) { }
+    private fireStore: FireService,private loading: LoadingController) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.fireStore.getDatos("usuarios").subscribe(
+      data => {
+        for (let usuario of data) {
+          let usu = usuario.payload.doc.data();
+          usu['id'] = usuario.payload.doc.id;
+          this.datos.push(usu);
+          this.datos.forEach(element => {
+            console.log("rut: "+element.rut+" nombre: "+element.nombre);
+          });
+        }
+      }
+    );
+    await this.esperaEvento();
   }
 
   async registrar() {
+    let existe = await this.datos.find(usu => usu['rut'] == this.alumno.controls.rut.value);
+
     const now = new Date();
     let anioActual = now.getFullYear();
     const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);
@@ -67,11 +83,13 @@ export class RegistroPage implements OnInit {
     }
     this.alumno.controls.id.setValue(v4());
 
-    //Este método funciona a través de fireStore, ya que storage se une al service de fireStore desde su controlador, el método agregar hace puente
-    var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
+
+    var guardar = await this.storage.agregar(this.KEY, this.alumno.value, existe);
 
     if (guardar == true) {
+      /*correo = this.usuarioService.obtenerUsuario(this.alumno.controls.rut.value); Para otra version */
       this.alumno.reset();
+      /* this.verificar_password ='' ; */
       this.alert = '¡USUARIO REGISTRADO!';
       await this.toastError(this.alert);
       this.router.navigate(['/login']);
@@ -91,7 +109,15 @@ export class RegistroPage implements OnInit {
     });
     toast.present();
   }
-
+  async esperaEvento(){
+    const cargando = await this.loading.create(
+      {
+        message: 'Cargando...',
+        duration: 3000
+      }
+    );
+    cargando.present();
+  }
 }
 
 

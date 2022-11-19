@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
 
  async ngOnInit() {
 
-    this.fireStore.getDatos(this.KEY).subscribe(
+    await this.fireStore.getDatos(this.KEY).subscribe(
       data => {
         for (let usuario of data) {
           let usu = usuario.payload.doc.data();

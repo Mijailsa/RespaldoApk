@@ -18,11 +18,11 @@ export class AdministrarPage implements OnInit {
     rut: new FormControl('', [Validators.required, Validators.pattern('[0-9]{7,8}-[0-9kK]{1}')]),
     nombre: new FormControl('', [Validators.required, Validators.minLength(3)]),
     apellido: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    correo: new FormControl('',[Validators.email,Validators.required, Validators.pattern('[0-9a-zA-Z](\.[_a-z0-9-]+)+@duocuc.cl')]),  
+    correo: new FormControl('',[Validators.email,Validators.required, Validators.pattern('[0-9a-zA-Z](\.[_a-z0-9-]+)+@duocuc.cl')]),
     fecha_nac: new FormControl('', Validators.required),
     auto: new FormControl('',Validators.required),
     vehiculo: new FormControl('undefined'),
-    password: new FormControl('', [Validators.required, 
+    password: new FormControl('', [Validators.required,
                                    Validators.minLength(6),
                                    Validators.maxLength(18)]),
     tipo_usuario: new FormControl('',Validators.required)
@@ -73,7 +73,7 @@ export class AdministrarPage implements OnInit {
     this.eliminar = 1;
     this.registrar = undefined;
   }
-  
+
   async registrarAdmin(){
     const now = new Date();
     let anioActual = now.getFullYear();
@@ -89,14 +89,14 @@ export class AdministrarPage implements OnInit {
       var alerta ='¡MAYOR DE 17 AÑOS!';
       await this.toastError(alerta);
       return;
-    } 
+    }
     if (this.alumno.controls.password.value != this.verificar_password) {
       var alerta ='¡CONTRASEÑAS NO COINCIDEN!';
       await this.toastError(alerta);
       return;
     }
     this.alumno.controls.id.setValue(v4());
-    var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
+    var guardar = await this.storage.agregar(this.KEY, this.alumno.value, this.alumno.value); //no funca
     if (guardar == true) {
       this.alumno.reset();
       var alerta ='¡USUARIO REGISTRADO!';
@@ -114,7 +114,7 @@ export class AdministrarPage implements OnInit {
       var alerta ='¡USUARIO ELIMINADO!';
       await this.toastError(alerta);
     }
-    
+
   }
   async buscarAdmin(){
     this.usuario_buscado = await this.storage.getDato(this.KEY,this.alumno.controls.rut.value);
@@ -123,18 +123,18 @@ export class AdministrarPage implements OnInit {
     return this.usuario_buscado;
   }
   async modificarAdmin(){
-    
+
     const now = new Date();
     let anioActual = now.getFullYear();
     const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);
     let edadUsuario = nacUsuario.getFullYear();
     let resta = anioActual-edadUsuario;
-    
+
     if(resta<17){
       var alerta ='¡MAYOR DE 17 AÑOS!';
       await this.toastError(alerta);
       return;
-    } 
+    }
     if (this.alumno.controls.password.value != this.verificar_password) {
       var alerta ='¡CONTRASEÑAS NO COINCIDEN!';
       await this.toastError(alerta);

@@ -19,17 +19,7 @@ export class StorageService {
   }
 
   //MÉTODOS DEL CRUD DEL STORAGE:
-  async agregar(key, dato) {
-    await this.fireStore.getDatos(key).subscribe(
-      data =>{
-        for (let usuario of data) {
-          let usu = usuario.payload.doc.data();
-          usu['id'] = usuario.payload.doc.id;
-          this.datos.push(usu);
-        }
-      }
-    );
-    var existe = this.datos.find(usuario => usuario.rut == dato.rut);
+  async agregar(key, dato, existe) {
     if (existe == undefined) {
       let nvoId = dato.id;
       await this.fireStore.agregar(key, dato, nvoId);

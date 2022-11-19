@@ -154,7 +154,7 @@ export class StorageService {
   async validarLogin(key, rut, password): Promise<any> {
 
     console.log(key);
-    this.fireStore.getDatos(key).subscribe(
+    await this.fireStore.getDatos(key).subscribe(
       data => {
         for (let usuario of data) {
           let usu = usuario.payload.doc.data();

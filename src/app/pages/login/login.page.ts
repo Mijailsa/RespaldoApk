@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
 
   async login() {
     await this.storage.validarLogin(this.KEY, this.rut, this.password);
-    var login = this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
+    var login = await this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
     if (login != undefined) {
       await this.cargarPantalla();
       this.nuevorut = this.rut;

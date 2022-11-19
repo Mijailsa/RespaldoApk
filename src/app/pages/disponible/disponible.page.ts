@@ -3,6 +3,7 @@ import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ToastController } from '@ionic/angular';
+import { FireService } from 'src/app/services/fire.service';
 declare var google;
 @Component({
   selector: 'app-disponible',
@@ -11,13 +12,14 @@ declare var google;
 })
 export class DisponiblePage implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastController: ToastController) { }
+  constructor(private fireStore: FireService,private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastController: ToastController) { }
   //Variables disponible
   template = 1;
   idPasaje: any = [];
   solicitud: any;
   detalle: any = [];
   usuario: any = [];
+  usuarios: any = [];
   viajes: any = [];
   total: any = [];
   rut: any
@@ -42,24 +44,64 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
-    console.log("Entre en Disponible:");
-    let rut = this.route.snapshot.paramMap.get('rut');
-    this.usuario = await this.storage.getDato(this.KEY_USUARIO, rut);
-    console.log("Traigo al usuario en sesión:", this.usuario);
+    /* console.log("Traigo al usuario en sesión:", this.usuario);
     this.viajes = await this.storage.getDatos(this.KEY_VIAJE);
-    console.log("Traigo los viajes:", this.viajes);
-    this.viajes.forEach(async (value, index) => {
+    console.log("Traigo los viajes:", this.viajes); */
+   /*  await this.viajes.forEach(async (value, index) => {
       console.log("Entro en el foreach");
-      var interna = await this.storage.getDato(this.KEY_USUARIO, value.rut_conductor);
-      var precio = value.precio;
-      var arreglo = {
-        precios: value,
-        dato: interna
-      };
-      this.total.push(arreglo);
-    });
-    console.log("Total", this.total);
+      await this.fireStore.getDato(this.KEY_USUARIO, value.id).subscribe(
+        (response: any) => {
+          var interna = response.data();
+          var arreglo = {
+            precios: value,
+            dato: interna
+          };
+          this.total.push(arreglo);
+        }
+      );
+    }); */
+    let rut = await this.route.snapshot.paramMap.get('rut');
+    let id = await this.route.snapshot.paramMap.get('id');
+    await this.fireStore.getDato(this.KEY_USUARIO, id).subscribe(
+      (response: any) => {
+        this.usuario = response.data();
+      }
+    );
+    await this.fireStore.getDatos(this.KEY_USUARIO).subscribe(
+      data=>{
+        for(let usuario of data){
+          let user = usuario.payload.doc.data();
+          this.usuarios.push(user);
+        }
+      }
+    )
+    await this.fireStore.getDatos(this.KEY).subscribe(
+      data => {
+        for (let viaje of data) {
+          let travel = viaje.payload.doc.data();
+          this.viajes.push(travel);
+        }
+        this.viajes.forEach(async (value, index) => {
+            console.log("Entro en el foreach: Total 1"+value.rut_conductor);
+           let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
+           await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
+            (response: any) => {
+              console.log("Ojalá me esperen: 2");
+              var interna = response.data();
+              console.log(interna.rut);
+              var arreglo = {
+                precios: value,
+                dato: interna
+              };
+              console.log(arreglo);
+              this.total.push(arreglo);
+            }
+          );
+        });
+      }
+    );
   }
+
   /*async irDetalle(rut) {
     console.log("entro al método");
     await this.total.forEach(async (value, index) => {
@@ -149,7 +191,7 @@ export class DisponiblePage implements OnInit {
   }
   async irSolicitar(rut) {
     var user = this.usuario.rut;
-    
+
     await this.storage.guardarNuevoPasajero(rut);
     this.idPasaje = await this.storage.getDatos(this.KEY_VIAJE);
     this.idPasaje.forEach(async (value, index) => {

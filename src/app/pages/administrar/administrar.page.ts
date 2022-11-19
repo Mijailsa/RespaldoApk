@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute,Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from 'src/app/services/storage.service';
 import { v4 } from 'uuid';
 import { ToastController } from '@ionic/angular';
+import { FireService } from 'src/app/services/fire.service';
 
 @Component({
   selector: 'app-administrar',
@@ -38,12 +39,35 @@ export class AdministrarPage implements OnInit {
   verificar_password: string;
   usuario_buscado: any = [];
   identificable: any;
-  constructor(private navCtrl:NavController, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService
-    ,private router: Router, private toastController: ToastController) { }
+  datos: any = [];
+  alert: any;
+
+
+  constructor(private navCtrl:NavController, 
+              private route: ActivatedRoute, 
+              private usuarioService: UsuarioService, 
+              private storage: StorageService,
+              private router: Router, 
+              private toastController: ToastController,
+              private fireStore: FireService,
+              private loading: LoadingController) { }
 
   async ngOnInit() {
     let rut = this.route.snapshot.paramMap.get('rut');
     this.sesion = await this.storage.getDato(this.KEY, rut);
+    await this.fireStore.getDatos("usuarios").subscribe(
+      data => {
+        for (let usuario of data) {
+          let usu = usuario.payload.doc.data();
+          usu['id'] = usuario.payload.doc.id;
+          this.datos.push(usu);
+          this.datos.forEach(element => {
+            console.log("rut: "+element.rut+" nombre: "+element.nombre);
+          });
+        }
+      }
+    );
+    await this.esperaEvento();
   }
   irRegistrar(){
     this.variable = "Registrar Usuario";
@@ -75,6 +99,7 @@ export class AdministrarPage implements OnInit {
   }
 
   async registrarAdmin(){
+    let existe = await this.datos.find(usu => usu['rut'] == this.alumno.controls.rut.value);
     const now = new Date();
     let anioActual = now.getFullYear();
     const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);
@@ -96,14 +121,19 @@ export class AdministrarPage implements OnInit {
       return;
     }
     this.alumno.controls.id.setValue(v4());
-    var guardar = await this.storage.agregar(this.KEY, this.alumno.value, this.alumno.value); //no funca
+    var guardar = await this.storage.agregar(this.KEY, this.alumno.value, existe);
+    
     if (guardar == true) {
       this.alumno.reset();
       var alerta ='¡USUARIO REGISTRADO!';
       await this.toastError(alerta);
-
     }
-  }
+      else {
+        this.alert = '¡USUARIO YA EXISTE!'
+        await this.toastError(this.alert);
+      }
+    }
+    
   async eliminarAdmin(){
     if(this.sesion.rut == this.alumno.controls.rut.value){
       var alerta ='¡NO TE PUEDES ELIMINAR A TI MISMO!';
@@ -154,4 +184,15 @@ export class AdministrarPage implements OnInit {
     });
     toast.present();
   }
+
+  async esperaEvento(){
+    const cargando = await this.loading.create(
+      {
+        message: 'Cargando...',
+        duration: 3000
+      }
+    );
+    cargando.present();
+  }
+
 }

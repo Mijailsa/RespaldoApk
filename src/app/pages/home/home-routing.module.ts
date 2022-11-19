@@ -9,24 +9,24 @@ const routes: Routes = [
     component: HomePage,
     children: [
       {
-        path: 'administrar/:rut',
+        path: 'administrar/:rut/:id',
         loadChildren: () => import('../administrar/administrar.module').then(m => m.AdministrarPageModule)
       },
       {
-        path: 'perfil/:rut',
+        path: 'perfil/:rut/:id',
         loadChildren: () => import('../perfil/perfil.module').then(m => m.PerfilPageModule)
       },
       {
-        path: 'solicitud/:rut',
+        path: 'solicitud/:rut/:id',
         loadChildren: () => import('../solicitud/solicitud.module').then(m => m.SolicitudPageModule)
       },
       {
-        path: 'nuevoviaje/:rut',
+        path: 'nuevoviaje/:rut/:id',
         loadChildren: () => import('../nuevoviaje/nuevoviaje.module').then(m => m.NuevoviajePageModule)
       },
 
       {
-        path: 'disponible/:rut',
+        path: 'disponible/:rut/:id',
         loadChildren: () => import('../disponible/disponible.module').then(m => m.DisponiblePageModule)
       },
 

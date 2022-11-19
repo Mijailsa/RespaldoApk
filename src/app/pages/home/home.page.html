@@ -58,26 +58,26 @@
         <ion-label>Home</ion-label>
 
       </ion-tab-button>-->
-      <ion-tab-button tab="administrar/{{sesion.rut}}" *ngIf="sesion.tipo_usuario == 'administrador'">
+      <ion-tab-button tab="administrar/{{sesion.rut}}/{{sesion.id}}" *ngIf="sesion.tipo_usuario == 'administrador'">
         <ion-icon name="close-circle-outline"></ion-icon>
 
         <ion-label>Admin</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="perfil/{{sesion.rut}}">
+      <ion-tab-button tab="perfil/{{sesion.rut}}/{{sesion.id}}">
         <ion-icon name="person-circle-outline"></ion-icon>
         <ion-label>Perfil</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="disponible/{{sesion.rut}}"
+      <ion-tab-button tab="disponible/{{sesion.rut}}/{{sesion.id}}"
         *ngIf="sesion.auto == 'no' && sesion.tipo_usuario != 'administrador'">
         <ion-icon name="airplane-outline"></ion-icon>
         <ion-label>Buscar</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="nuevoviaje/{{sesion.rut}}"
+      <ion-tab-button tab="nuevoviaje/{{sesion.rut}}/{{sesion.id}}"
         *ngIf="sesion.auto == 'si' && sesion.tipo_usuario != 'administrador' && sesion.vehiculo != 'undefined'">
         <ion-icon name="location-outline"></ion-icon>
         <ion-label>Crear Viaje</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="solicitud/{{sesion.rut}}"
+      <ion-tab-button tab="solicitud/{{sesion.rut}}/{{sesion.id}}"
         *ngIf="sesion.auto == 'si' && sesion.tipo_usuario != 'administrador' && sesion.vehiculo != 'undefined' &&  tiene_viaje != undefined && tiene_viaje.pasajeros!='sin'">
         <ion-icon name="notifications-outline"></ion-icon>
         <ion-label>Solicitudes</ion-label>

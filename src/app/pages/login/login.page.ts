@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
       this.nuevorut = this.rut;
       this.password = '';
       this.rut = '';
-      this.navCtrl.navigateForward(['/home/', this.nuevorut]);
+      this.navCtrl.navigateForward(['/home/', this.nuevorut,login.id]);
     } else {
       await this.toastError();
     }

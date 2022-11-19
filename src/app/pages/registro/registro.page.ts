@@ -67,12 +67,11 @@ export class RegistroPage implements OnInit {
     }
     this.alumno.controls.id.setValue(v4());
 
-     var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
+    //Este método funciona a través de fireStore, ya que storage se une al service de fireStore desde su controlador, el método agregar hace puente
+    var guardar = await this.storage.agregar(this.KEY, this.alumno.value);
 
     if (guardar == true) {
-      /*correo = this.usuarioService.obtenerUsuario(this.alumno.controls.rut.value); Para otra version */
       this.alumno.reset();
-      /* this.verificar_password ='' ; */
       this.alert = '¡USUARIO REGISTRADO!';
       await this.toastError(this.alert);
       this.router.navigate(['/login']);

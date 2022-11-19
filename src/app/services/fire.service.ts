@@ -37,7 +37,9 @@ export class FireService {
 
  getDato(coleccion, id){
     try {
+
       return this.fire.collection(coleccion).doc(id).get();
+
     } catch (error) {
       console.log(error);
     }

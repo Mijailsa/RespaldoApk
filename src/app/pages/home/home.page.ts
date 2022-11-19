@@ -12,6 +12,11 @@ import { FireService } from 'src/app/services/fire.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+
+
+  //variable de pruebas unitarias:
+
+
   rut: any;
   sesion: any = [];
   tiene_viaje: any = [];
@@ -22,40 +27,51 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     let rut = await this.route.snapshot.paramMap.get('rut');
-
+    let id = await this.route.snapshot.paramMap.get('id');
+    this.fireStore.getDato(this.KEY, id).subscribe(
+      (response: any) => {
+        this.sesion = response.data();
+      }
+    );
+    this.fireStore.getDato(this.KEY_VIAJE, rut).subscribe(
+      (response: any) => {
+        this.tiene_viaje = response.data();
+      }
+    );
+    /* this.tiene_viaje = await this.storage.getDatoViaje(this.KEY_VIAJE, rut); */
+  }
+  async recargar(rut) {
     this.sesion = await this.storage.getDato(this.KEY, rut);
-    this.tiene_viaje = await this.storage.getDatoViaje(this.KEY_VIAJE,rut);
-    /*this.sesion = this.usuarioService.obtenerUsuario(rut);*/
-
   }
 
-  perfil(rut){
-    this.navCtrl.navigateForward(['/perfil',rut]);
-  }
-  administrar(rut){
-    this.navCtrl.navigateForward(['/administrar',rut]);
-  }
-  async cerrarSesion(){
+  async cerrarSesion() {
     await this.storage.logout();
   }
-  async recargar(rut){
-    this.sesion = await this.storage.getDato(this.KEY, rut);
-  }
+  /*
+    perfil(rut, id) {
+      this.navCtrl.navigateForward(['/perfil', rut,id]);
+    }
+    administrar(rut,id) {
+      this.navCtrl.navigateForward(['/administrar', rut,id]);
+    }
+    async recargar(rut) {
+      this.sesion = await this.storage.getDato(this.KEY, rut);
+    }
 
-  irCrearViaje(){
-    var session = this.sesion;
-    var navExtras: NavigationExtras = {
-      state: {
-        usuario: session
-      }
-    };
-    //funciona
-    console.log(navExtras.state.usuario.rut);
-    this.router.navigate(['/recorrido'], navExtras);
-  }
+    irCrearViaje() {
+      var session = this.sesion;
+      var navExtras: NavigationExtras = {
+        state: {
+          usuario: session
+        }
+      };
+      //funciona
+      console.log(navExtras.state.usuario.rut);
+      this.router.navigate(['/recorrido'], navExtras);
+    }
 
-  irSolicitudViaje(){
-    this.router.navigate(['/solicitud']);
-  }
-
+    irSolicitudViaje() {
+      this.router.navigate(['/solicitud']);
+    }
+   */
 }

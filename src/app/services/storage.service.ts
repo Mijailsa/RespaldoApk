@@ -76,13 +76,14 @@ export class StorageService {
   }
 
   async actualizar(key, dato) {
+   /*  this.datos = [];
     this.datos = await this.storage.get(key) || [];
 
     var index = this.datos.findIndex(value => value.id == dato.id);
-    this.datos[index] = dato;
+    this.datos[index] = dato; */
     await this.fireStore.modificar(key, dato.id, dato);
 
-    await this.storage.set(key, this.datos);
+   /*  await this.storage.set(key, this.datos); */
   }
   async guardarNuevoPasajero(rutConductor) {
     this.datos = await this.storage.get("viajes") || [];
@@ -192,30 +193,30 @@ export class StorageService {
     this.datos = await this.storage.get(key) || [];
     var dato = this.datos.find(dato => dato.viaje.rut_conductor == conductor);
   }
-/*   async existeAdmin() {
-    var id = '0';
-    this.datos = await this.storage.get("usuarios") || [];
-    var existe = this.datos.find(admin => admin.id == id);
-    if (existe == undefined) {
-      console.log("crealo");
-      this.datos = [{
-        id: '0',
-        rut: '20763231-7',
-        nombre: 'Jose',
-        apellido: 'Contreras',
-        correo: 'rolando.hernandezv@duocuc.cl',
-        fecha_nac: '01/04/2002',
-        auto: 'no',
-        vehiculo: 'undefined',
-        password: '12341234',
-        tipo_usuario: 'administrador'
-      }];
-      await this.storage.set("usuarios", this.datos);
-      return false;
-    }
-    return true;
+  /*   async existeAdmin() {
+      var id = '0';
+      this.datos = await this.storage.get("usuarios") || [];
+      var existe = this.datos.find(admin => admin.id == id);
+      if (existe == undefined) {
+        console.log("crealo");
+        this.datos = [{
+          id: '0',
+          rut: '20763231-7',
+          nombre: 'Jose',
+          apellido: 'Contreras',
+          correo: 'rolando.hernandezv@duocuc.cl',
+          fecha_nac: '01/04/2002',
+          auto: 'no',
+          vehiculo: 'undefined',
+          password: '12341234',
+          tipo_usuario: 'administrador'
+        }];
+        await this.storage.set("usuarios", this.datos);
+        return false;
+      }
+      return true;
 
-  } */
+    } */
   async getDatoViaje(key, identificador) {
     this.datos = await this.storage.get(key) || [];
     return this.datos.find(dato => dato.rut_conductor == identificador);

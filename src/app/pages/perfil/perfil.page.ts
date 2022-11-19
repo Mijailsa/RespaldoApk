@@ -6,6 +6,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { v4 } from 'uuid';
 import { ToastController } from '@ionic/angular';
 import { HomePage } from '../home/home.page';
+import { FireService } from 'src/app/services/fire.service';
 
 @Component({
   selector: 'app-perfil',
@@ -15,7 +16,7 @@ import { HomePage } from '../home/home.page';
 export class PerfilPage implements OnInit {
 
   constructor(private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService,
-    private toastController: ToastController, private home : HomePage) { }
+    private toastController: ToastController, private home : HomePage, private fireStore: FireService) { }
   rut: any;
   sesion: any = [];
   default: any = undefined;
@@ -49,7 +50,12 @@ export class PerfilPage implements OnInit {
   KEY = "usuarios";
   async ngOnInit() {
     let rut = await this.route.snapshot.paramMap.get('rut');
-    this.sesion = await this.storage.getDato(this.KEY, rut);
+    let id = await this.route.snapshot.paramMap.get('id');
+    await this.fireStore.getDato(this.KEY, id).subscribe(
+      (response: any) => {
+        this.sesion = response.data();
+      }
+    );
     /*  await this.sesion = this.storage.getDato(this.KEY, 'rut'); */
   }
 
@@ -99,8 +105,13 @@ export class PerfilPage implements OnInit {
     else if (num == 2) {
       this.sesion.vehiculo = this.carro.value;
       await this.storage.actualizar(this.KEY, this.sesion);
-      var cambio = this.sesion.rut;
-      this.sesion = await this.storage.getDato(this.KEY, cambio);
+      /* var cambio = this.sesion.rut;
+      this.sesion = await this.storage.getDato(this.KEY, cambio); */
+      await this.fireStore.getDato(this.KEY, this.sesion.id).subscribe(
+        (response: any) => {
+          this.sesion = response.data();
+        }
+      );
       this.default = 4;
       await this.home.recargar(this.sesion.rut);
       var alerta = "Auto agregado.";
@@ -114,6 +125,6 @@ export class PerfilPage implements OnInit {
       duration: 3000
     });
     toast.present();
-    
+
   }
 }

@@ -28,12 +28,12 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     let rut = await this.route.snapshot.paramMap.get('rut');
     let id = await this.route.snapshot.paramMap.get('id');
-    this.fireStore.getDato(this.KEY, id).subscribe(
+    await this.fireStore.getDato(this.KEY, id).subscribe(
       (response: any) => {
         this.sesion = response.data();
       }
     );
-    this.fireStore.getDato(this.KEY_VIAJE, rut).subscribe(
+    await this.fireStore.getDato(this.KEY_VIAJE, rut).subscribe(
       (response: any) => {
         this.tiene_viaje = response.data();
       }
@@ -41,7 +41,12 @@ export class HomePage implements OnInit {
     /* this.tiene_viaje = await this.storage.getDatoViaje(this.KEY_VIAJE, rut); */
   }
   async recargar(rut) {
-    this.sesion = await this.storage.getDato(this.KEY, rut);
+    /* this.sesion = await this.storage.getDato(this.KEY, rut); */
+    await this.fireStore.getDato(this.KEY, this.sesion.id).subscribe(
+      (response: any)=>{
+        this.sesion = response.data();
+      }
+    )
   }
 
   async cerrarSesion() {

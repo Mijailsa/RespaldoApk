@@ -20,15 +20,19 @@ export class StorageService {
 
   //MÉTODOS DEL CRUD DEL STORAGE:
   async agregar(key, dato) {
-    await this.existeAdmin();
-    this.datos = await this.storage.get(key) || [];
+    await this.fireStore.getDatos(key).subscribe(
+      data =>{
+        for (let usuario of data) {
+          let usu = usuario.payload.doc.data();
+          usu['id'] = usuario.payload.doc.id;
+          this.datos.push(usu);
+        }
+      }
+    );
     var existe = this.datos.find(usuario => usuario.rut == dato.rut);
     if (existe == undefined) {
-      this.datos.push(dato);
-      await this.storage.set(key, this.datos);
       let nvoId = dato.id;
       await this.fireStore.agregar(key, dato, nvoId);
-
       return true;
     }
     return false;
@@ -86,6 +90,7 @@ export class StorageService {
 
     var index = this.datos.findIndex(value => value.id == dato.id);
     this.datos[index] = dato;
+    await this.fireStore.modificar(key, dato.id, dato);
 
     await this.storage.set(key, this.datos);
   }
@@ -197,7 +202,7 @@ export class StorageService {
     this.datos = await this.storage.get(key) || [];
     var dato = this.datos.find(dato => dato.viaje.rut_conductor == conductor);
   }
-  async existeAdmin() {
+/*   async existeAdmin() {
     var id = '0';
     this.datos = await this.storage.get("usuarios") || [];
     var existe = this.datos.find(admin => admin.id == id);
@@ -220,7 +225,7 @@ export class StorageService {
     }
     return true;
 
-  }
+  } */
   async getDatoViaje(key, identificador) {
     this.datos = await this.storage.get(key) || [];
     return this.datos.find(dato => dato.rut_conductor == identificador);

@@ -27,10 +27,11 @@ export class StorageService {
     }
     return false;
   }
-  async agregarViaje(key, dato) {
-    this.datos = await this.storage.get(key) || [];
+  async agregarViaje(key, dato, id) {
+    /* this.datos = await this.storage.get(key) || [];
     this.datos.push(dato);
-    await this.storage.set(key, this.datos);
+    await this.storage.set(key, this.datos); */
+    await this.fireStore.agregar(key, dato, id);
     return true;
   }
 

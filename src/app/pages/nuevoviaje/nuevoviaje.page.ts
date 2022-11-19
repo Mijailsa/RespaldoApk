@@ -5,6 +5,8 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { v4 } from 'uuid';
 import { ToastController } from '@ionic/angular';
+import { FireService } from 'src/app/services/fire.service';
+import { HomePage } from '../home/home.page';
 
 declare var google;
 @Component({
@@ -28,7 +30,7 @@ export class NuevoviajePage implements OnInit {
     pasajeros: new FormControl('sin')
   });
 
-  
+
   //2. VAMOS A CREAR LAS VARIABLES NECESARIAS PARA EL MAPA:
   mapa: any;
   marker: any;
@@ -46,7 +48,8 @@ export class NuevoviajePage implements OnInit {
   searches:any ;
   place:any;
   alert
-  constructor(private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastcontroller:ToastController) { }
+  constructor(private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastcontroller:ToastController,
+    private fireStore: FireService, private homePage: HomePage) { }
 
 
 
@@ -54,13 +57,19 @@ export class NuevoviajePage implements OnInit {
 
   async ngOnInit() {
     let rut = await this.route.snapshot.paramMap.get('rut');
-    this.usuario = await this.storage.getDato(this.KEY, rut);
+    let id = await this.route.snapshot.paramMap.get('id');
+    await this.fireStore.getDato(this.KEY, id).subscribe(
+      (response: any) => {
+        this.usuario = response.data();
+      }
+    );
+    /* this.usuario = await this.storage.getDato(this.KEY, rut); */
 
     this.dibujarMapa();
     this.agregarMarcador();
     this.getInicio(this.mapa, this.marker);
     this.buscarDestino(this.mapa, this.marker);
-    
+
 
   }
 
@@ -91,7 +100,7 @@ export class NuevoviajePage implements OnInit {
     var autocomplete: HTMLElement = document.getElementById('autocomplete');
     const search = new google.maps.places.Autocomplete(autocomplete);
     this.searches = search;
-  
+
     search.addListener('place_changed', function () {
       var places = search.getPlace().geometry.location;
 
@@ -107,11 +116,11 @@ export class NuevoviajePage implements OnInit {
       mapaLocal.setZoom(15);
       marcadorLocal.setPosition(places);
     });
-    
-   
+
+
   }
 
- 
+
   async getInicio(mapaLocal, marcadorLocal) {
     var autocomplete: HTMLElement = document.getElementById('inicio');
     const search = new google.maps.places.Autocomplete(autocomplete);
@@ -119,13 +128,13 @@ export class NuevoviajePage implements OnInit {
     this.search = search;
     search.addListener('place_changed', function () {
       var place = search.getPlace().geometry.location;
-      
+
       console.log('Inicio: '+place)
 
       var places = JSON.stringify(place);
 
        var cordenadas = JSON.parse(places)
-    
+
       mapaLocal.setCenter(place);
       mapaLocal.setZoom(15);
       marcadorLocal.setPosition(place);
@@ -140,7 +149,7 @@ export class NuevoviajePage implements OnInit {
     var place = this.search.getPlace().geometry.location;
     var places= this.searches.getPlace().geometry.location;
     var request = {
-      
+
       origin: place,
       destination: places,
       travelMode: google.maps.TravelMode.DRIVING
@@ -169,18 +178,23 @@ export class NuevoviajePage implements OnInit {
     await this.calcularRuta();
     var origen: any = this.ubicacionDuoc;
     var destino: any = this.ubicacionDestino;
+    let rutId = this.viaje.controls.rut_conductor.value;
     console.log(origen)
     console.log(destino)
+    await this.viaje.controls.id.setValue(rutId);
     await this.viaje.controls.origen.setValue(origen);
     await this.viaje.controls.destino.setValue(destino);
     await this.viaje.controls.capacidad.setValue(capacidad);
-    var guardar = await this.storage.agregarViaje(this.KEY_VIAJES, this.viaje.value);
+
+    var guardar = await this.storage.agregarViaje(this.KEY_VIAJES, this.viaje.value, this.viaje.controls.id.value);
     if (guardar == true) {
+      await this.homePage.recargar(this.viaje.controls.id.value);
       this.viaje.reset();
       this.alert='¡VIAJE CREADO! Espera a que te lleguen solicitudes';
       this.toastError(this.alert);
+
     }
-  } 
+  }
 
   async toastError(alerta) {
     const toast = await this.toastcontroller.create({

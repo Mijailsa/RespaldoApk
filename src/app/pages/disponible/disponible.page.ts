@@ -15,6 +15,7 @@ export class DisponiblePage implements OnInit {
   constructor(private fireStore: FireService,private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastController: ToastController) { }
   //Variables disponible
   template = 1;
+  pasajesSolicitados: any = [];
   idPasaje: any = [];
   solicitud: any;
   detalle: any = [];
@@ -191,9 +192,11 @@ export class DisponiblePage implements OnInit {
   }
   async irSolicitar(rut) {
     var user = this.usuario.rut;
-
-    await this.storage.guardarNuevoPasajero(rut);
-    this.idPasaje = await this.storage.getDatos(this.KEY_VIAJE);
+    console.log("Soy rut solicitar: "+rut);
+    await this.storage.guardarNuevoPasajero(rut, this.viajes);
+    console.log("soy yo 1")
+    this.idPasaje = this.viajes;
+    console.log("Soy yo. 2")
     this.idPasaje.forEach(async (value, index) => {
       if (rut == value.rut_conductor) {
         /*value.pasajeros = {...value.pasajeros, user };*/
@@ -211,7 +214,6 @@ export class DisponiblePage implements OnInit {
           capacidad: nuevaCapacidad,
           pasajeros: this.solicitud,
         };
-        console.log("creacion: ", creacion);
         await this.storage.actualizar(this.KEY_VIAJE, creacion);
         this.template = 1;
         this.titulo = "Viaje Solicitado";

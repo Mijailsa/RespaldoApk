@@ -86,9 +86,11 @@ export class StorageService {
 
    /*  await this.storage.set(key, this.datos); */
   }
-  async guardarNuevoPasajero(rutConductor) {
-    this.datos = await this.storage.get("viajes") || [];
-    var existe = this.datos.find(viaje => viaje.rut_conductor == rutConductor);
+  async guardarNuevoPasajero(rutConductor, datos) {
+    console.log("intento entrar 0")
+    this.datos = datos;
+    var existe = await this.datos.find(viaje => viaje.rut_conductor == rutConductor);
+    console.log("Existe: "+existe.pasajeros+" Cantidad: "+existe.cantidad);
     if (existe.pasajeros == "sin") {
       var creacion: any = {
         id: existe.id,
@@ -101,9 +103,10 @@ export class StorageService {
         capacidad: existe.capacidad,
         pasajeros: [],
       };
-      var index = this.datos.findIndex(value => value.rut_conductor == rutConductor);
+      /* var index = this.datos.findIndex(value => value.rut_conductor == rutConductor);
       this.datos[index] = creacion;
-      await this.storage.set("viajes", this.datos);
+      await this.storage.set("viajes", this.datos); */
+      await this.fireStore.modificar("viajes",creacion.id,creacion);
       return true;
     }
     return false;

@@ -38,6 +38,9 @@ export class DisponiblePage implements OnInit {
   inicio: any;
   final: any;
   datos: any;
+  ///
+  api :any
+
   /* waypoints = WayPoint [] = */  /* DESCOMENTAR CUANDO SE CARGUEN EN LOS WAYPOINTS PARA TRAZAR LA RUTA DE LOS OTROS VIAJES INTEGRANDO EL LOCALSTORAGE SEGUN DONDE VAN LOS PASAJEROS */
   ubicacionDuoc = { lat: 0, lng: 0 };
   ubicacionDos = { lat: -33.600379048832046, lng: -70.57719180496413 };
@@ -45,6 +48,9 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
+   
+
+   
     /* console.log("Traigo al usuario en sesión:", this.usuario);
     this.viajes = await this.storage.getDatos(this.KEY_VIAJE);
     console.log("Traigo los viajes:", this.viajes); */
@@ -101,6 +107,7 @@ export class DisponiblePage implements OnInit {
         });
       }
     );
+    await this.calcularDolar()
   }
 
   /*async irDetalle(rut) {
@@ -279,4 +286,21 @@ export class DisponiblePage implements OnInit {
     toast.present();
   }
 
+
+ async calcularDolar(){
+
+
+  try {
+    let Apis = await this.fireStore.api();
+    Apis.subscribe((data:any)=>{
+      this.api =data.serie[0].valor
+      console.log( this.api)
+      
+    })
+    
+  } catch (error) {
+    console.log('No se encuentra disponible el valor del dolar de hoy')
+  }
+
+  }
 }

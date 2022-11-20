@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
@@ -6,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 })
 export class FireService {
 
-  constructor(private fire: AngularFirestore) { }
+  constructor(private fire: AngularFirestore, private http :HttpClient) { }
   usuario = {
     rut: 'a'
   };
@@ -51,5 +52,8 @@ export class FireService {
     }
   }
 
+async api(){
 
+    return  await this.http.get('https://mindicador.cl/api/dolar') 
+}
 }

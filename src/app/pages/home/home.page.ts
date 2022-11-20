@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
 
   //variable de pruebas unitarias:
 
-
+  api: any [] = [];
   rut: any;
   sesion: any = [];
   tiene_viaje: any = [];
@@ -26,6 +26,9 @@ export class HomePage implements OnInit {
     private navCtrl: NavController, private storage: StorageService, private fireStore: FireService) { }
 
   async ngOnInit() {
+
+   
+   
     let rut = await this.route.snapshot.paramMap.get('rut');
     let id = await this.route.snapshot.paramMap.get('id');
     await this.fireStore.getDato(this.KEY, id).subscribe(
@@ -79,5 +82,6 @@ export class HomePage implements OnInit {
       this.router.navigate(['/solicitud']);
     }
    */
+
 
 }

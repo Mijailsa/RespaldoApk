@@ -16,12 +16,12 @@ export class DisponiblePage implements OnInit {
   //Variables disponible
   template = 1;
   pasajesSolicitados: any = [];
-  idPasaje: any = [];
+  idPasaje: any[] = [];
   solicitud: any;
   detalle: any = [];
   usuario: any = [];
   usuarios: any = [];
-  viajes: any = [];
+  viajes: any[] = [];
   total: any = [];
   rut: any
   KEY_VIAJE = "viajes";
@@ -48,9 +48,6 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
-   
-
-   
     /* console.log("Traigo al usuario en sesión:", this.usuario);
     this.viajes = await this.storage.getDatos(this.KEY_VIAJE);
     console.log("Traigo los viajes:", this.viajes); */
@@ -137,7 +134,6 @@ export class DisponiblePage implements OnInit {
         this.detalle = detalleViaje;
         var nuevoOrigen = value.precios.origen;
         var nuevoDestino = value.precios.destino;
-        await this.buscarViaje(value.precios.rut_conductor);
         var map: HTMLElement = document.getElementById('map');
         this.mapa = await new google.maps.Map(map, {
           center: this.ubicacionDuoc,
@@ -164,9 +160,10 @@ export class DisponiblePage implements OnInit {
     this.template = 3;
   }
   async leerQr(){
-    var user = this.usuario.rut;
-    await this.storage.guardarPasajeroQr(this.idViajes);
-    this.idPasaje = await this.storage.getDatos(this.KEY_VIAJE);
+    var user = this.usuario.rut;/*
+    await this.recargar(); */
+    await this.storage.guardarPasajeroQr(this.idViajes, this.viajes);
+    this.idPasaje = this.viajes;
     this.idPasaje.forEach(async (value, index) => {
       if (this.idViajes == value.id) {
         /*value.pasajeros = {...value.pasajeros, user };*/
@@ -184,7 +181,6 @@ export class DisponiblePage implements OnInit {
           capacidad: nuevaCapacidad,
           pasajeros: this.solicitud,
         };
-        console.log("creacion: ", creacion);
         await this.storage.actualizar(this.KEY_VIAJE, creacion);
         this.template = 1;
         this.titulo = "Viaje Solicitado";
@@ -198,7 +194,9 @@ export class DisponiblePage implements OnInit {
     this.template = 1;
   }
   async irSolicitar(rut) {
-    var user = this.usuario.rut;
+    var user = this.usuario.rut;/*
+    await this.recargar(); */
+    /* await this.recargar(); */
     console.log("Soy rut solicitar: "+rut);
     await this.storage.guardarNuevoPasajero(rut, this.viajes);
     console.log("soy yo 1")
@@ -229,6 +227,35 @@ export class DisponiblePage implements OnInit {
       }
     });
 
+  }
+  async recargar(){
+    this.viajes = [];
+    /* this.idPasaje = []; */
+    await this.fireStore.getDatos(this.KEY).subscribe(
+      data => {
+        for (let viaje of data) {
+          let travel = viaje.payload.doc.data();
+          this.viajes.push(travel);
+        }
+        this.viajes.forEach(async (value, index) => {
+            console.log("Entro en el foreach: Total 1"+value.rut_conductor);
+           let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
+           await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
+            (response: any) => {
+              console.log("Ojalá me esperen: 2");
+              var interna = response.data();
+              console.log(interna.rut);
+              var arreglo = {
+                precios: value,
+                dato: interna
+              };
+              console.log(arreglo);
+              this.total.push(arreglo);
+            }
+          );
+        });
+      }
+    );
   }
   async dibujarMapa() {
     var map: HTMLElement = document.getElementById('map');
@@ -276,7 +303,6 @@ export class DisponiblePage implements OnInit {
   async buscarViaje(identificador) {
     this.datos = await this.storage.getDatoViaje(this.KEY, identificador);
     console.log(this.datos)
-    return this.datos;
   }
   async toastError(alerta) {
     const toast = await this.toastController.create({
@@ -295,9 +321,9 @@ export class DisponiblePage implements OnInit {
     Apis.subscribe((data:any)=>{
       this.api =data.serie[0].valor
       console.log( this.api)
-      
+
     })
-    
+
   } catch (error) {
     console.log('No se encuentra disponible el valor del dolar de hoy')
   }

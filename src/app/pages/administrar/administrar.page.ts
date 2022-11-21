@@ -54,7 +54,12 @@ export class AdministrarPage implements OnInit {
 
   async ngOnInit() {
     let rut = this.route.snapshot.paramMap.get('rut');
-    this.sesion = await this.storage.getDato(this.KEY, rut);
+    let id = await this.route.snapshot.paramMap.get('id');
+    await this.fireStore.getDato(this.KEY, id).subscribe(
+      (response: any) => {
+        this.sesion = response.data();
+      }
+    );
     await this.fireStore.getDatos("usuarios").subscribe(
       data => {
         for (let usuario of data) {
@@ -141,14 +146,14 @@ export class AdministrarPage implements OnInit {
       await this.toastError(alerta);
     }
     else{
-      await this.storage.eliminar(this.KEY,this.alumno.controls.rut.value);
+      await this.storage.eliminar(this.KEY,this.alumno.controls.rut.value, this.datos);
       var alerta ='¡USUARIO ELIMINADO!';
       await this.toastError(alerta);
     }
 
   }
   async buscarAdmin(){
-    this.usuario_buscado = await this.storage.getDato(this.KEY,this.alumno.controls.rut.value);
+    this.usuario_buscado = await this.datos.find(dato => dato.rut == this.alumno.controls.rut.value);
     this.modificar = 2;
     this.identificable = this.usuario_buscado.id;
     return this.usuario_buscado;

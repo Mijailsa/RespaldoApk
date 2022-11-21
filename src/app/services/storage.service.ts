@@ -55,17 +55,22 @@ export class StorageService {
     return this.datos;
   }
 
-  async eliminar(key, identificador) {
+ /*  async eliminar(key, identificador) {
     this.datos = await this.storage.get(key) || [];
-
     this.datos.forEach((value, index) => {
       if (value.rut == identificador) {
         this.datos.splice(index, 1);
       }
     });
-
     await this.storage.set(key, this.datos);
+  } */
+
+  async eliminar(key, identificador, datos){
+    let usu = datos.find(dato => dato.rut == identificador);
+    await this.fireStore.eliminar(key, usu.id);
+    await this.fireStore.eliminar("viajes", usu.rut);
   }
+
   async eliminarViaje(key, identificador) {
     this.datos = await this.storage.get(key) || [];
     this.datos.forEach((value, index) => {

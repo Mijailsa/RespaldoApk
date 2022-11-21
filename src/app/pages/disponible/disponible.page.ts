@@ -70,18 +70,14 @@ export class DisponiblePage implements OnInit {
           this.viajes.push(travel);
         }
         this.viajes.forEach(async (value, index) => {
-            console.log("Entro en el foreach: Total 1"+value.rut_conductor);
            let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
            await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
             (response: any) => {
-              console.log("Ojalá me esperen: 2");
               var interna = response.data();
-              console.log(interna.rut);
               var arreglo = {
                 precios: value,
                 dato: interna
               };
-              console.log(arreglo);
               this.total.push(arreglo);
             }
           );
@@ -93,10 +89,8 @@ export class DisponiblePage implements OnInit {
 
 
   async irDetalle(rut) {
-    console.log("entro al método");
     await this.total.forEach(async (value, index) => {
       if (value.dato.rut == rut) {
-        console.log("entro al detalle");
         this.template = 2;
         var detalleViaje = value;
         this.detalle = detalleViaje;
@@ -165,11 +159,8 @@ export class DisponiblePage implements OnInit {
     var user = this.usuario.rut;/*
     await this.recargar(); */
     /* await this.recargar(); */
-    console.log("Soy rut solicitar: "+rut);
     await this.storage.guardarNuevoPasajero(rut, this.viajes);
-    console.log("soy yo 1")
     this.idPasaje = this.viajes;
-    console.log("Soy yo. 2")
     this.idPasaje.forEach(async (value, index) => {
       if (rut == value.rut_conductor) {
         /*value.pasajeros = {...value.pasajeros, user };*/
@@ -206,18 +197,14 @@ export class DisponiblePage implements OnInit {
           this.viajes.push(travel);
         }
         this.viajes.forEach(async (value, index) => {
-            console.log("Entro en el foreach: Total 1"+value.rut_conductor);
            let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
            await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
             (response: any) => {
-              console.log("Ojalá me esperen: 2");
               var interna = response.data();
-              console.log(interna.rut);
               var arreglo = {
                 precios: value,
                 dato: interna
               };
-              console.log(arreglo);
               this.total.push(arreglo);
             }
           );
@@ -270,7 +257,6 @@ export class DisponiblePage implements OnInit {
   }
   async buscarViaje(identificador) {
     this.datos = await this.storage.getDatoViaje(this.KEY, identificador);
-    console.log(this.datos)
   }
   async toastError(alerta) {
     const toast = await this.toastController.create({
@@ -287,13 +273,11 @@ export class DisponiblePage implements OnInit {
   try {
     let Apis = await this.fireStore.api();
     Apis.subscribe((data:any)=>{
-      this.api =data.serie[0].valor
-      console.log( this.api)
+      this.api =data.serie[0].valor;
 
     })
 
   } catch (error) {
-    console.log('No se encuentra disponible el valor del dolar de hoy')
   }
 
   }

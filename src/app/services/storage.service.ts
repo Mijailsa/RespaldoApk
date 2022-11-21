@@ -87,10 +87,8 @@ export class StorageService {
    /*  await this.storage.set(key, this.datos); */
   }
   async guardarNuevoPasajero(rutConductor, datos) {
-    console.log("intento entrar 0")
     this.datos = datos;
     var existe = await this.datos.find(viaje => viaje.rut_conductor == rutConductor);
-    console.log("Existe: "+existe.pasajeros+" Cantidad: "+existe.cantidad);
     if (existe.pasajeros == "sin") {
       var creacion: any = {
         id: existe.id,

@@ -25,6 +25,10 @@
       Leer Qr
       <ion-icon name="qr-code-outline"></ion-icon>
     </ion-button>
+    <ion-button size="default" (click)="ngOnInit()">
+      Refrescar
+      <ion-icon name="refresh-circle-outline"></ion-icon>
+    </ion-button>
   </div>
   <div class="fondo-detalle" *ngIf="template == 2">
     <div class="formularioViaje">
@@ -71,7 +75,7 @@
     <ion-item>
       <ion-input [(ngModel)]="idViajes" placeholder="Inserte identificador pasaje."></ion-input>
     </ion-item>
-    
+
     <div class="botones-qr">
       <ion-button size="default" (click)="leerQr()">
         Leer

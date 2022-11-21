@@ -12,7 +12,7 @@ declare var google;
 })
 export class DisponiblePage implements OnInit {
 
-  constructor(private fireStore: FireService,private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastController: ToastController) { }
+  constructor(private fireStore: FireService, private router: Router, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService, private toastController: ToastController) { }
   //Variables disponible
   template = 1;
   pasajesSolicitados: any = [];
@@ -28,8 +28,9 @@ export class DisponiblePage implements OnInit {
   KEY_USUARIO = "usuarios";
   message: any = 0;
   titulo = "Viajes Disponibles";
-  idViajes :any;
+  idViajes: any;
   //Variables detalle
+  idImportante: any;
   mapa: any;
   marker: any;
   search: any;
@@ -39,7 +40,7 @@ export class DisponiblePage implements OnInit {
   final: any;
   datos: any;
   ///
-  api :any
+  api: any
 
   /* waypoints = WayPoint [] = */  /* DESCOMENTAR CUANDO SE CARGUEN EN LOS WAYPOINTS PARA TRAZAR LA RUTA DE LOS OTROS VIAJES INTEGRANDO EL LOCALSTORAGE SEGUN DONDE VAN LOS PASAJEROS */
   ubicacionDuoc = { lat: 0, lng: 0 };
@@ -48,16 +49,21 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
+    this.usuario = [];
+    this.usuarios = [];
+    this.viajes = [];
+    this.total = [];
     let rut = await this.route.snapshot.paramMap.get('rut');
     let id = await this.route.snapshot.paramMap.get('id');
+    this.idImportante = id;
     await this.fireStore.getDato(this.KEY_USUARIO, id).subscribe(
       (response: any) => {
         this.usuario = response.data();
       }
     );
     await this.fireStore.getDatos(this.KEY_USUARIO).subscribe(
-      data=>{
-        for(let usuario of data){
+      data => {
+        for (let usuario of data) {
           let user = usuario.payload.doc.data();
           this.usuarios.push(user);
         }
@@ -70,8 +76,8 @@ export class DisponiblePage implements OnInit {
           this.viajes.push(travel);
         }
         this.viajes.forEach(async (value, index) => {
-           let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
-           await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
+          let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
+          await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
             (response: any) => {
               var interna = response.data();
               var arreglo = {
@@ -85,6 +91,7 @@ export class DisponiblePage implements OnInit {
       }
     );
     await this.calcularDolar();
+    return true;
   }
 
 
@@ -96,6 +103,7 @@ export class DisponiblePage implements OnInit {
         this.detalle = detalleViaje;
         var nuevoOrigen = value.precios.origen;
         var nuevoDestino = value.precios.destino;
+        await this.buscarViaje(rut);
         var map: HTMLElement = document.getElementById('map');
         this.mapa = await new google.maps.Map(map, {
           center: this.ubicacionDuoc,
@@ -118,18 +126,18 @@ export class DisponiblePage implements OnInit {
       };
     });
   }
-  async irQr(){
+  async irQr() {
     this.template = 3;
   }
-  async leerQr(){
-    var user = this.usuario.rut;/*
-    await this.recargar(); */
-    await this.storage.guardarPasajeroQr(this.idViajes, this.viajes);
+  async leerQr() {
+    var user = this.usuario.rut;
+    this.idPasaje = [];
     this.idPasaje = this.viajes;
+    await this.storage.guardarPasajeroQr(this.idViajes, this.idPasaje);
+
     this.idPasaje.forEach(async (value, index) => {
       if (this.idViajes == value.id) {
-        /*value.pasajeros = {...value.pasajeros, user };*/
-        var nuevaCapacidad = value.capacidad-1;
+        var nuevaCapacidad = value.capacidad - 1;
         this.solicitud = [...value.pasajeros];
         this.solicitud.push(user);
         var creacion: any = {
@@ -144,6 +152,7 @@ export class DisponiblePage implements OnInit {
           pasajeros: this.solicitud,
         };
         await this.storage.actualizar(this.KEY_VIAJE, creacion);
+        await this.recargar();
         this.template = 1;
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
@@ -156,15 +165,13 @@ export class DisponiblePage implements OnInit {
     this.template = 1;
   }
   async irSolicitar(rut) {
-    var user = this.usuario.rut;/*
-    await this.recargar(); */
-    /* await this.recargar(); */
-    await this.storage.guardarNuevoPasajero(rut, this.viajes);
+    this.idPasaje = [];
+    var user = this.usuario.rut;
     this.idPasaje = this.viajes;
-    this.idPasaje.forEach(async (value, index) => {
+    await this.storage.guardarNuevoPasajero(rut, this.idPasaje);
+    await this.idPasaje.forEach(async (value, index) => {
       if (rut == value.rut_conductor) {
-        /*value.pasajeros = {...value.pasajeros, user };*/
-        var nuevaCapacidad = value.capacidad-1;
+        var nuevaCapacidad = value.capacidad - 1;
         this.solicitud = [...value.pasajeros];
         this.solicitud.push(user);
         var creacion: any = {
@@ -179,6 +186,7 @@ export class DisponiblePage implements OnInit {
           pasajeros: this.solicitud,
         };
         await this.storage.actualizar(this.KEY_VIAJE, creacion);
+        await this.recargar();
         this.template = 1;
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
@@ -186,31 +194,13 @@ export class DisponiblePage implements OnInit {
       }
     });
 
+
   }
-  async recargar(){
-    this.viajes = [];
-    /* this.idPasaje = []; */
-    await this.fireStore.getDatos(this.KEY).subscribe(
-      data => {
-        for (let viaje of data) {
-          let travel = viaje.payload.doc.data();
-          this.viajes.push(travel);
-        }
-        this.viajes.forEach(async (value, index) => {
-           let chofer = await this.usuarios.find(usu => usu.rut == value.rut_conductor);
-           await this.fireStore.getDato(this.KEY_USUARIO, chofer.id).subscribe(
-            (response: any) => {
-              var interna = response.data();
-              var arreglo = {
-                precios: value,
-                dato: interna
-              };
-              this.total.push(arreglo);
-            }
-          );
-        });
-      }
-    );
+  async recargar() {
+    this.usuario = [];
+        this.usuarios = [];
+        this.viajes = [];
+        this.total = [];
   }
   async dibujarMapa() {
     var map: HTMLElement = document.getElementById('map');
@@ -238,8 +228,6 @@ export class DisponiblePage implements OnInit {
       origin: this.ubicacionDuoc,
       destination: place,
       travelMode: google.maps.TravelMode.DRIVING
-      /* waypoints: this.wayPoints,
-   optimizeWaypoints: true,  DESCOMENTAR  CUANDO SE OCUPE LOCAL STORAGE*/
     };
 
     await this.directionsService.route(request, async (respuesta, status) => {
@@ -267,18 +255,18 @@ export class DisponiblePage implements OnInit {
   }
 
 
- async calcularDolar(){
+  async calcularDolar() {
 
 
-  try {
-    let Apis = await this.fireStore.api();
-    Apis.subscribe((data:any)=>{
-      this.api =data.serie[0].valor;
+    try {
+      let Apis = await this.fireStore.api();
+      Apis.subscribe((data: any) => {
+        this.api = data.serie[0].valor;
 
-    })
+      })
 
-  } catch (error) {
-  }
+    } catch (error) {
+    }
 
   }
 }

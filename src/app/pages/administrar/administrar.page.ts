@@ -43,11 +43,11 @@ export class AdministrarPage implements OnInit {
   alert: any;
 
 
-  constructor(private navCtrl:NavController, 
-              private route: ActivatedRoute, 
-              private usuarioService: UsuarioService, 
+  constructor(private navCtrl:NavController,
+              private route: ActivatedRoute,
+              private usuarioService: UsuarioService,
               private storage: StorageService,
-              private router: Router, 
+              private router: Router,
               private toastController: ToastController,
               private fireStore: FireService,
               private loading: LoadingController) { }
@@ -67,6 +67,7 @@ export class AdministrarPage implements OnInit {
         }
       }
     );
+    this.listado = this.datos;
     await this.esperaEvento();
   }
   irRegistrar(){
@@ -81,7 +82,7 @@ export class AdministrarPage implements OnInit {
     this.registrar = undefined;
     this.eliminar = undefined;
     this.modificar = undefined;
-    this.listado = await this.storage.getDatos(this.KEY);
+    this.listado = this.datos;
   }
   irModificar(){
     this.variable = "Modificar Usuario";
@@ -122,7 +123,7 @@ export class AdministrarPage implements OnInit {
     }
     this.alumno.controls.id.setValue(v4());
     var guardar = await this.storage.agregar(this.KEY, this.alumno.value, existe);
-    
+
     if (guardar == true) {
       this.alumno.reset();
       var alerta ='¡USUARIO REGISTRADO!';
@@ -133,7 +134,7 @@ export class AdministrarPage implements OnInit {
         await this.toastError(this.alert);
       }
     }
-    
+
   async eliminarAdmin(){
     if(this.sesion.rut == this.alumno.controls.rut.value){
       var alerta ='¡NO TE PUEDES ELIMINAR A TI MISMO!';

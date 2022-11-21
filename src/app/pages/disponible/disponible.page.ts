@@ -48,22 +48,6 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
-    /* console.log("Traigo al usuario en sesión:", this.usuario);
-    this.viajes = await this.storage.getDatos(this.KEY_VIAJE);
-    console.log("Traigo los viajes:", this.viajes); */
-   /*  await this.viajes.forEach(async (value, index) => {
-      console.log("Entro en el foreach");
-      await this.fireStore.getDato(this.KEY_USUARIO, value.id).subscribe(
-        (response: any) => {
-          var interna = response.data();
-          var arreglo = {
-            precios: value,
-            dato: interna
-          };
-          this.total.push(arreglo);
-        }
-      );
-    }); */
     let rut = await this.route.snapshot.paramMap.get('rut');
     let id = await this.route.snapshot.paramMap.get('id');
     await this.fireStore.getDato(this.KEY_USUARIO, id).subscribe(
@@ -104,26 +88,10 @@ export class DisponiblePage implements OnInit {
         });
       }
     );
-    await this.calcularDolar()
+    await this.calcularDolar();
   }
 
-  /*async irDetalle(rut) {
-    console.log("entro al método");
-    await this.total.forEach(async (value, index) => {
-      if (value.dato.rut == rut) {
-        console.log("entro al detalle");
-        this.template = 2;
-        var detalleViaje = value;
-        this.detalle = detalleViaje;
-        var geo = await this.getUbicacionActual();
-        this.ubicacionDuoc.lat = geo.coords.latitude;
-        this.ubicacionDuoc.lng = geo.coords.longitude;
-        await this.buscarViaje(value.precios.rut_conductor);
-        await this.dibujarMapa();
-        console.log("arreglo detalle: ", this.detalle);
-      };
-    });
-  } */
+
   async irDetalle(rut) {
     console.log("entro al método");
     await this.total.forEach(async (value, index) => {

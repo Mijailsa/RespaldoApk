@@ -240,6 +240,7 @@ export class StorageService {
     );
     return this.datos;
   }
+
   async getListaSolicitudes(key, identificador,) {
     this.datos = await this.storage.get(key) || [];
     return this.datos.find(dato => dato.id == identificador)

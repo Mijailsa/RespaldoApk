@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ToastController } from '@ionic/angular';
-import {v4} from 'uuid';
+import { v4 } from 'uuid';
 import { FireService } from 'src/app/services/fire.service';
 
 declare var google;
@@ -68,10 +68,11 @@ export class SolicitudPage implements OnInit {
     });
   }
 
-  async generarQr(){
-    var nuevoQr = await this.storage.getDatoViaje(this.KEY_VIAJES,this.usuario.rut);
-    this.value_qr = nuevoQr.id;
-    this.mostrar_qr = nuevoQr.id;
+  async generarQr() {
+    /* var nuevoQr = await this.storage.getDatoViaje(this.KEY_VIAJES, this.usuario.rut); */
+    var nuevoQr = this.usuario;
+    this.value_qr = nuevoQr.rut;
+    this.mostrar_qr = nuevoQr.rut;
     this.template = 5;
   }
 
@@ -85,7 +86,7 @@ export class SolicitudPage implements OnInit {
   async iniciarViaje() {
     var rut = this.usuario.rut;
     await this.storage.inicioViaje(rut, this.listado);
-   /*  this.detalleViaje = await this.storage.getDatoViaje(this.KEY_VIAJES, rut); */
+    /*  this.detalleViaje = await this.storage.getDatoViaje(this.KEY_VIAJES, rut); */
     this.template = 2;
     var nuevoOrigen = this.detalleViaje.origen;
     var nuevoDestino = this.detalleViaje.destino;
@@ -180,7 +181,7 @@ export class SolicitudPage implements OnInit {
   async buscarViaje(identificador) {
     this.datos = await this.storage.getDatoViaje(this.KEY_VIAJES, identificador);
     console.log(this.datos);
-     /* this.datos = this.detalleViaje; */
+    /* this.datos = this.detalleViaje; */
     return this.datos;
   }
   async toastError(alerta) {
@@ -190,7 +191,7 @@ export class SolicitudPage implements OnInit {
     });
     toast.present();
   }
-  async volverMenu(){
+  async volverMenu() {
     this.template = 1;
   }
 

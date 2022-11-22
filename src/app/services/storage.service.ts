@@ -245,17 +245,17 @@ export class StorageService {
 
 
 
-  async eliminarPasajero(key, identificador, rutPasajero) {
-    this.datos = await this.storage.get(key) || []
-
-    this.datos.forEach((value, index) => {
+  async eliminarPasajero(key, identificador, rutPasajero, dato) {
+    this.datos = dato;
+    await this.datos.forEach(async (value, index) => {
       if (value.rut_conductor == identificador) {
         this.nvoDato = value.pasajeros;
 
-        this.nvoDato.forEach((pasaje, indice) => {
+        await this.nvoDato.forEach(async(pasaje, indice) => {
           if (pasaje == rutPasajero) {
             this.nvoDato.splice(indice, 1);
             value.pasajeros = this.nvoDato;
+            await this.fireStore.modificar(key, identificador, value);
           }
         });
 
@@ -263,7 +263,6 @@ export class StorageService {
 
     }
     );
-    await this.storage.set(key, this.datos);
   }
   /*  async eliminar(key, identificador) {
      this.datos = await this.storage.get(key) || [];

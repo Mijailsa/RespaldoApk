@@ -5,6 +5,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ToastController } from '@ionic/angular';
 import {v4} from 'uuid';
+import { FireService } from 'src/app/services/fire.service';
 
 declare var google;
 
@@ -32,19 +33,30 @@ export class SolicitudPage implements OnInit {
   mostrar_qr: any;
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService
-    , private router: Router, private toastController: ToastController) { }
+    , private router: Router, private toastController: ToastController, private fireStore: FireService) { }
 
   async ngOnInit() {
     let rut = this.route.snapshot.paramMap.get('rut');
-    this.usuario = await this.storage.getDato(this.KEY_USUARIO, rut);
-    await this.getListado(rut);
-
+    let id = await this.route.snapshot.paramMap.get('id');
+    await this.fireStore.getDato(this.KEY_USUARIO, id).subscribe(
+      (response: any) => {
+        this.usuario = response.data();
+      }
+    );
+    await this.fireStore.getDatos(this.KEY_VIAJES).subscribe(
+      data => {
+        for (let viaje of data) {
+          let travel = viaje.payload.doc.data();
+          this.listado.push(travel);
+        }
+        this.getListado(rut);
+      }
+    );
   }
 
 
   async getListado(rut) {
-    this.listado = await this.storage.getDatos(this.KEY_VIAJES);
-    this.listado.forEach(async (value, index) => {
+    await this.listado.forEach(async (value, index) => {
       if (rut == value.rut_conductor) {
         this.solicitud = [...value.pasajeros];
       }
@@ -59,7 +71,7 @@ export class SolicitudPage implements OnInit {
   }
 
   async eliminarPasajeros(rutpasajero, rutSesion) {
-    await this.storage.eliminarPasajero(this.KEY_VIAJES, this.usuario.rut, rutpasajero);
+    await this.storage.eliminarPasajero(this.KEY_VIAJES, this.usuario.rut, rutpasajero, this.listado);
     await this.getListado(rutSesion);
     var alerta = "Pasajero eliminado";
     await this.toastError(alerta);

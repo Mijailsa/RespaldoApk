@@ -1,24 +1,41 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire/compat';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 import { LoginPage } from './login.page';
 
-describe('LoginPage', () => {
-  let component: LoginPage;
-  let fixture: ComponentFixture<LoginPage>;
+ 
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ LoginPage ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(LoginPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+describe("PRUEBA UNITARIAS: home", ()=>{
+  //configurar nuestro ambiente de pruebas:
+  beforeEach( async ()=>{
+  await TestBed.configureTestingModule({
+  imports: [
+  ReactiveFormsModule,
+  FormsModule,
+  AngularFireModule.initializeApp(environment.firebaseConfig)
+  ],
+  declarations: [
+  LoginPage
+  ]
+  }).compileComponents();
 });
+
+it('1.Levantar la pagina Login',()=>{
+  const fixture = TestBed.createComponent(LoginPage);
+  const app = fixture.componentInstance;
+
+  expect(app).toBeTruthy();
+
+});
+it('2. Ingreso de credenciales incorrecto', ()=>{
+const fixture = TestBed.createComponent(LoginPage)
+const app = fixture.componentInstance; 
+
+let rut= app.rut
+
+})
+});
+  

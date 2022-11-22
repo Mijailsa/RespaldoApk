@@ -136,8 +136,8 @@ export class StorageService {
     }
     return false;
   }
-  async inicioViaje(rutConductor) {
-    this.datos = await this.storage.get("viajes") || [];
+  async inicioViaje(rutConductor, dato) {
+    this.datos = dato;
     var existe = this.datos.find(viaje => viaje.rut_conductor == rutConductor);
     if (existe.iniciado == '0') {
       var creacion: any = {
@@ -151,9 +151,10 @@ export class StorageService {
         capacidad: existe.capacidad,
         pasajeros: existe.pasajeros,
       };
-      var index = this.datos.findIndex(value => value.rut_conductor == rutConductor);
+      await this.fireStore.modificar("viajes",existe.id, creacion);
+     /*  var index = this.datos.findIndex(value => value.rut_conductor == rutConductor);
       this.datos[index] = creacion;
-      await this.storage.set("viajes", this.datos);
+      await this.storage.set("viajes", this.datos); */
       return true;
     }
     return false;
@@ -224,8 +225,7 @@ export class StorageService {
       return true;
 
     } */
-    async getDatoViaje(key, identificador) {
-
+  async getDatoViaje(key, identificador) {
     this.datos = await this.storage.get(key) || [];
     return this.datos.find(dato => dato.rut_conductor == identificador);
   }

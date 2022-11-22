@@ -43,6 +43,11 @@ export class SolicitudPage implements OnInit {
         this.usuario = response.data();
       }
     );
+    await this.fireStore.getDato(this.KEY_VIAJES, rut).subscribe(
+      (response: any) => {
+        this.detalleViaje = response.data();
+      }
+    );
     await this.fireStore.getDatos(this.KEY_VIAJES).subscribe(
       data => {
         for (let viaje of data) {
@@ -79,8 +84,8 @@ export class SolicitudPage implements OnInit {
 
   async iniciarViaje() {
     var rut = this.usuario.rut;
-    await this.storage.inicioViaje(rut);
-    this.detalleViaje = await this.storage.getDatoViaje(this.KEY_VIAJES, rut);
+    await this.storage.inicioViaje(rut, this.listado);
+   /*  this.detalleViaje = await this.storage.getDatoViaje(this.KEY_VIAJES, rut); */
     this.template = 2;
     var nuevoOrigen = this.detalleViaje.origen;
     var nuevoDestino = this.detalleViaje.destino;
@@ -174,7 +179,8 @@ export class SolicitudPage implements OnInit {
   }
   async buscarViaje(identificador) {
     this.datos = await this.storage.getDatoViaje(this.KEY_VIAJES, identificador);
-    console.log(this.datos)
+    console.log(this.datos);
+     /* this.datos = this.detalleViaje; */
     return this.datos;
   }
   async toastError(alerta) {

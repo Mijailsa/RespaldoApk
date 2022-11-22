@@ -58,7 +58,7 @@ export class RegistroPage implements OnInit {
 
   async registrar() {
     let existe = await this.datos.find(usu => usu['rut'] == this.alumno.controls.rut.value);
-
+    let correoNotRepeat = await this.datos.find(usu => usu['correo'] == this.alumno.controls.correo.value);
     const now = new Date();
     let anioActual = now.getFullYear();
     const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);
@@ -79,7 +79,11 @@ export class RegistroPage implements OnInit {
       this.alert = '¡CONTRASEÑAS NO COINCIDEN!';
       await this.toastError(this.alert);
       return;
-
+    }
+    if(correoNotRepeat != undefined){
+      this.alert = '¡EL CORREO YA EXISTE!';
+      await this.toastError(this.alert);
+      return;
     }
     this.alumno.controls.id.setValue(v4());
 

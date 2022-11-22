@@ -72,7 +72,7 @@ export class SolicitudPage implements OnInit {
 
   async eliminarPasajeros(rutpasajero, rutSesion) {
     await this.storage.eliminarPasajero(this.KEY_VIAJES, this.usuario.rut, rutpasajero, this.listado);
-    await this.getListado(rutSesion);
+    await this.ngOnInit();
     var alerta = "Pasajero eliminado";
     await this.toastError(alerta);
   }

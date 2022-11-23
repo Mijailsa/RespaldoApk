@@ -43,7 +43,12 @@
   justify-content: space-around;
   font-family: "Montserrat";
   overflow: scroll;
-
+  .dolar {
+    margin-top: 1vh;
+    font-family: Lobster;
+    color: rgb(34, 22, 1);
+    margin-bottom: 3vh;
+  }
   .titulo {
     margin-top: 12.5vh;
     font-family: Lobster;

@@ -40,8 +40,9 @@ export class DisponiblePage implements OnInit {
   final: any;
   datos: any;
   ///
-  api: any
-
+  api: any;
+  precio:any;
+  dolar: any;
   /* waypoints = WayPoint [] = */  /* DESCOMENTAR CUANDO SE CARGUEN EN LOS WAYPOINTS PARA TRAZAR LA RUTA DE LOS OTROS VIAJES INTEGRANDO EL LOCALSTORAGE SEGUN DONDE VAN LOS PASAJEROS */
   ubicacionDuoc = { lat: 0, lng: 0 };
   ubicacionDos = { lat: -33.600379048832046, lng: -70.57719180496413 };
@@ -49,6 +50,7 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
+    
     this.usuario = [];
     this.usuarios = [];
     this.viajes = [];
@@ -90,7 +92,7 @@ export class DisponiblePage implements OnInit {
         });
       }
     );
-    await this.calcularDolar();
+    await this.TraerApi();
     return true;
   }
 
@@ -103,6 +105,9 @@ export class DisponiblePage implements OnInit {
         this.detalle = detalleViaje;
         var nuevoOrigen = value.precios.origen;
         var nuevoDestino = value.precios.destino;
+        this.precio = value.precios.precio
+        console.log(typeof this.precio)
+        this.calcularDolar(this.precio)
         await this.buscarViaje(rut);
         var map: HTMLElement = document.getElementById('map');
         this.mapa = await new google.maps.Map(map, {
@@ -191,6 +196,7 @@ export class DisponiblePage implements OnInit {
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
         await this.toastError(alerta);
+        this.total = []
       }
     });
 
@@ -255,18 +261,31 @@ export class DisponiblePage implements OnInit {
   }
 
 
-  async calcularDolar() {
+  async TraerApi() {
 
 
     try {
       let Apis = await this.fireStore.api();
       Apis.subscribe((data: any) => {
         this.api = data.serie[0].valor;
+        
+     
 
+        console.log(this.api)
       })
 
     } catch (error) {
     }
+
+  }
+
+  async calcularDolar(precio) {
+
+    var dolar = this.api
+    this.dolar =  (precio / dolar).toFixed(2)
+    
+    console.log(precio)
+    console.log(this.dolar)
 
   }
 }

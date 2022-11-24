@@ -54,7 +54,7 @@ export class DisponiblePage implements OnInit {
     this.usuario = [];
     this.usuarios = [];
     this.viajes = [];
-    this.total = [];
+    
     let rut = await this.route.snapshot.paramMap.get('rut');
     let id = await this.route.snapshot.paramMap.get('id');
     this.idImportante = id;
@@ -73,6 +73,7 @@ export class DisponiblePage implements OnInit {
     )
     await this.fireStore.getDatos(this.KEY).subscribe(
       data => {
+        this.total = [];
         for (let viaje of data) {
           let travel = viaje.payload.doc.data();
           this.viajes.push(travel);
@@ -143,7 +144,10 @@ export class DisponiblePage implements OnInit {
     this.idPasaje.forEach(async (value, index) => {
       if (this.idViajes == value.id) {
         var nuevaCapacidad = value.capacidad - 1;
-        this.solicitud = [...value.pasajeros];
+
+        if (nuevaCapacidad >0) {
+
+          this.solicitud = [...value.pasajeros];
         this.solicitud.push(user);
         var creacion: any = {
           id: value.id,
@@ -162,6 +166,13 @@ export class DisponiblePage implements OnInit {
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
         await this.toastError(alerta);
+
+        }else{
+          var error = 'Viaje sin capacidad'
+          this.toastError(error)
+          return;
+        }
+        
       }
     });
   }
@@ -196,7 +207,7 @@ export class DisponiblePage implements OnInit {
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
         await this.toastError(alerta);
-        this.total = []
+        await this.recargar();
       }
     });
 

@@ -73,7 +73,7 @@
         <ion-label>Buscar</ion-label>
       </ion-tab-button>
       <ion-tab-button tab="nuevoviaje/{{sesion.rut}}/{{sesion.id}}"
-        *ngIf="sesion.auto == 'si' && sesion.tipo_usuario != 'administrador' && sesion.vehiculo != 'undefined'">
+        *ngIf="sesion.auto == 'si' && sesion.tipo_usuario != 'administrador' && sesion.vehiculo != 'undefined' && tiene_viaje == undefined">
         <ion-icon name="location-outline"></ion-icon>
         <ion-label>Crear Viaje</ion-label>
       </ion-tab-button>

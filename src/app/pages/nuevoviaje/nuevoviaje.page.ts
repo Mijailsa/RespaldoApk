@@ -38,10 +38,10 @@ export class NuevoviajePage implements OnInit {
   directionsService = new google.maps.DirectionsService();
   directionsRenderer = new google.maps.DirectionsRenderer();
   usuario: any = [];
-  rut: any
+  rut: any ;
   KEY: any = "usuarios";
   KEY_VIAJES: any = "viajes";
-
+  ubicacionInicial: any = {lat: -33.5985866, lng: -70.579071} ;
   ubicacionDuoc :any;
   ubicacionDestino :any;
   local1 : any;
@@ -78,12 +78,12 @@ export class NuevoviajePage implements OnInit {
   dibujarMapa() {
     var map: HTMLElement = document.getElementById('map');
     this.mapa = new google.maps.Map(map, {
-      center: this.ubicacionDuoc,
+      center: this.ubicacionInicial,
       zoom: 18
     });
     this.directionsRenderer.setMap(this.mapa);
     this.marker = new google.maps.Marker({
-      position: this.ubicacionDuoc,
+      position: this.ubicacionInicial,
       map: this.mapa
     });
 
@@ -91,7 +91,7 @@ export class NuevoviajePage implements OnInit {
 
   //agregar un nuevo marcador al mapa:
   agregarMarcador() {
-    this.marker.setPosition(this.ubicacionDuoc);
+    this.marker.setPosition(this.ubicacionInicial);
     this.marker.setMap(this.mapa);
   }
 

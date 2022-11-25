@@ -16,7 +16,7 @@
         font-family: 'Lobster';
         color: rgba(4, 4, 43, 0.904);
     }
-    
+
 }
   .botones-qr{
     margin-top: 10vh;
@@ -30,6 +30,90 @@
     }
   }
 
+
+}
+
+.fondo-chat {
+  box-shadow: none;
+  height: 82.5vh;
+  margin-top: 10vh;
+  background: transparentize($color: #000000bd, $amount: 0.3);
+  background: url("../../../assets/img/fondo.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Montserrat";
+  overflow: hidden;
+  h1{
+    margin-top: 2.5vh;
+    color: white;
+  }
+  .sepLista {
+    margin-top: 1.5vh;
+    background: rgb(238, 174, 202);
+    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(233, 207, 148, 1) 100%);
+    border-radius: 10px;
+    height: 70vh;
+    width: 80vw;
+    .mensajesListas {
+      height: 80%;
+      overflow: scroll;
+      .mensajesLista {
+        padding-top: 0.3vh;
+        padding-bottom: 0.3vh;
+        text-align: center;
+        ion-row {
+          --background: none;
+          .yoLista {
+            color: red;
+            font-size: 2vh;
+            text-align: center;
+            font-family: Montserrat;
+          }
+          .yoListaU {
+            color: red;
+            font-size: 1.8vh;
+            font-family: Montserrat;
+          }
+          .tuLista {
+            color: green;
+            font-size: 1.5vh;
+            font-family: Montserrat;
+          }
+          .tuListaU {
+            color: green;
+            font-size: 2vh;
+            font-family: Montserrat;
+          }
+        }
+      }
+    }
+    .formularioChat {
+      height: 20%;
+      ion-item {
+        --background: none;
+
+        ion-label {
+          --color: red;
+          font-size: 2vh;
+          text-align: center;
+          font-family: Montserrat;
+        }
+        ion-input {
+          --color: red;
+          font-size: 2vh;
+          text-align: center;
+          font-family: Montserrat;
+        }
+      }
+      ion-button {
+        --background: transparentize($color: #1e7065cb, $amount: 0.3);
+        width: 30%;
+      }
+    }
+  }
 }
 .fondo {
   box-shadow: none;
@@ -190,14 +274,14 @@ ion-item{
   font-family: 'Lobster';
   font-weight: bold;
   color: rgba(4, 4, 43, 0.904);
-  
+
 }
 
 div{
   background: linear-gradient(rgba(255,165,0,0.6), rgba(223, 164, 116, 0.3) );
   display: flex;
   flex-direction: column;
-  
+
 }*/
 
 // div {

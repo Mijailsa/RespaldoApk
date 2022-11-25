@@ -17,10 +17,16 @@
             </ion-col>
             <ion-col size="6" class="Fuentes">
               <div>
-                <b>Rut</b>: {{solicitud[i]}}
-                <ion-button (click)="eliminarPasajeros(solicitud[i],usuario.rut)">
-                  <ion-icon name="trash"></ion-icon>
-                </ion-button>
+                <div class="rutPas"><b>Rut</b>: {{solicitud[i]}}</div>
+                <div class="buttonsOptions">
+                  <ion-button (click)="eliminarPasajeros(solicitud[i],usuario.rut)">
+                    <ion-icon name="trash"></ion-icon>
+                  </ion-button>
+                  <ion-button (click)="cambiarChat(solicitud[i],usuario.rut)">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                  </ion-button>
+                </div>
+
               </div>
             </ion-col>
           </ion-row>
@@ -59,17 +65,52 @@
       src="https://img.freepik.com/vector-premium/banner-sello-cancelado-rojo-sobre-fondo-transparente-diseno-eps-textura-grunge-diseno-vectorial_123447-3282.jpg"
       alt="">
   </div>
-  <div class="fondo-qr" *ngIf="template ==5">
-    <div class="qr">
-      <ngx-qrcode [elementType]="elementType" [value]="value_qr">
-      </ngx-qrcode>
-    </div>
-    <div class="volver">
-      <p>{{mostrar_qr}}</p>
-      <ion-button (click)="volverMenu()">
-        Volver
-      </ion-button>
-    </div>
 
+  <div class="fondo-chat" *ngIf="template == 6">
+    <h1>Consulta</h1>
+    <div class="sepLista">
+      <div *ngIf="losMensajes != undefined" class="mensajesListas">
+        <div *ngFor="let aux of losMensajes; let i = index" [attr.data-index]="i" class="mensajesLista">
+          <ion-row *ngIf="aux['rut']==emisorCond">
+            <ion-col size="3" class="yoListaU">
+              {{aux['rut']}} :
+            </ion-col>
+            <ion-col size="9" class="yoLista">
+              {{aux['message']}}
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="aux['rut']==receptorPas">
+            <ion-col size="9" class="tuListaU">
+              {{aux['message']}}
+            </ion-col>
+            <ion-col size="3" class="tuLista">
+              : {{aux['rut']}}
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+      <div class="formularioChat">
+        <form [formGroup]="mensaje" (ngSubmit)="enviarMensaje()">
+          <ion-item>
+            <ion-label>Mensaje: </ion-label>
+            <ion-input type="text" placeholder="..." formControlName="message"></ion-input>
+          </ion-item>
+
+          <ion-button type="button" (click)="volverMenu()">
+            Volver
+            <ion-icon name="send-outline"></ion-icon>
+          </ion-button>
+          <ion-button type="button" (click)="recargar()">
+            Refrescar
+            <ion-icon name="refresh-outline"></ion-icon>
+          </ion-button>
+          <ion-button type="submit">
+            Enviar
+            <ion-icon name="send-outline"></ion-icon>
+          </ion-button>
+
+        </form>
+      </div>
+    </div>
   </div>
 </ion-content>

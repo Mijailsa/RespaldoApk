@@ -1,7 +1,7 @@
 <ion-content>
   <div class="fondo" *ngIf="template == 1">
     <h1 class="titulo">{{titulo}}</h1>
-    <h5 class = "dolar"> Valor Dolar del dia: {{api}}</h5>
+    <h5 class = "dolar"> Valor Dolar del día: {{api}}</h5>
     <ion-list lines="none" id="lista" *ngFor="let aux of total">
       <ion-item class="item">
         <div>
@@ -53,7 +53,7 @@
         <div>DISPONIBLE: Sin cupo</div>
       </ion-item>
       <ion-item>
-        <div>PRECIO: $ {{detalle.precios.precio}} pesos  Ó  $ {{dolar}} dolares </div>
+        <div><p>PRECIO: $ {{detalle.precios.precio}} pesos  o  $ {{dolar}} dólares.</p> </div>
       </ion-item>
       <ion-item>
         <div>HORA SALIDA: {{detalle.precios.salida}} horas</div>

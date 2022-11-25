@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -15,6 +16,14 @@ declare var google;
   styleUrls: ['./solicitud.page.scss'],
 })
 export class SolicitudPage implements OnInit {
+
+  mensaje = new FormGroup({
+    rutX: new FormControl(''),
+    message: new FormControl(''),
+    id: new FormControl(''),
+    rutY: new FormControl('')
+  });
+
   KEY_VIAJES: any = "viajes";
   KEY_USUARIO = "usuarios";
   rut: any;
@@ -31,6 +40,22 @@ export class SolicitudPage implements OnInit {
   elementType = 'canvas';
   value_qr = 'www.google.cl';
   mostrar_qr: any;
+
+  receptorPas: any;
+  emisorCond: any;
+  largeMessage: any;
+  messages: any = [];
+  losMensajes: any = [];
+  messageChatEspecifico: any = {
+    rutX: '',
+    rutY: '',
+    messages: [
+      {
+        rut: '',
+        message: ''
+      }
+    ]
+  }
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService
     , private router: Router, private toastController: ToastController, private fireStore: FireService) { }
@@ -57,6 +82,14 @@ export class SolicitudPage implements OnInit {
         this.getListado(rut);
       }
     );
+    await this.fireStore.getDatos("mensajes").subscribe(
+      data => {
+        for (let mensaje of data) {
+          let message = mensaje.payload.doc.data();
+          this.messages.push(message);
+        }
+      }
+    )
   }
 
 
@@ -194,7 +227,115 @@ export class SolicitudPage implements OnInit {
   async volverMenu() {
     this.template = 1;
   }
+  async cambiarChat(rutPas, idSesion) {
+    this.emisorCond = idSesion;
+    this.receptorPas = rutPas;
+    await this.messages.forEach(element => {
+      let prueba = 0;
+      if (element.chat.rutX == rutPas && element.chat.rutY == idSesion || element.chat.rutY == rutPas && element.chat.rutX == idSesion) {
 
+        console.log("entro:" + element.chat.messages);
+
+        this.losMensajes = [...element.chat.messages];
+        let i = 0;
+        this.losMensajes.forEach(element => {
+          console.log("xd: " + element.id);
+          i = i + 1;
+        });
+        this.template = 6;
+        console.log(i);
+        this.largeMessage = i;
+        console.log("no troleo o tal vez si xdxd")
+        return;
+      }
+    });
+    console.log("troleo xdxdxd")
+      this.messageChatEspecifico = {
+        rutX: idSesion,
+        rutY: rutPas,
+        messages: [
+          {
+            rut: 'default',
+            message: 'default'
+          }
+        ]
+      };
+      this.template = 6;
+      this.largeMessage = 1;
+      let chatEsp = {
+        chat: this.messageChatEspecifico
+      }
+      let idDoc = idSesion + "" + rutPas;
+      this.fireStore.agregar("mensajes", chatEsp, idDoc);
+
+  }
+  async enviarMensaje() {
+    /* var guardar = await this.storage.agregar(this.KEY, this.alumno.value, existe); */
+    this.mensaje.controls.rutX.setValue(this.emisorCond);
+    this.mensaje.controls.rutY.setValue(this.receptorPas);
+    let idDoc = this.emisorCond + "" + this.receptorPas;
+    let creacion = {
+      rut: this.mensaje.controls.rutX.value,
+      message: this.mensaje.controls.message.value
+    }
+    await this.losMensajes.push(creacion);
+    this.messageChatEspecifico = {
+      rutX: this.emisorCond,
+      rutY: this.receptorPas,
+      messages: this.losMensajes
+    };
+    let chatEsp = {
+      chat: this.messageChatEspecifico
+    };
+    await this.fireStore.modificar("mensajes", idDoc, chatEsp);
+    await this.mensaje.reset();
+    /* this.mensaje.controls.rutX.setValue(this.emisorCond);
+    this.mensaje.controls.rutY.setValue(this.receptorPas);
+    this.mensaje.controls.id.setValue(this.largeMessage+1);
+    let id: string = "x"+this.mensaje.controls.rutX.value+''+this.mensaje.controls.rutY.value;
+    console.log(this.mensaje.controls.id.value+" "+this.mensaje.controls.rutX.value+" "+this.mensaje.controls.rutY.value+" "+this.mensaje.controls.message.value);
+    if(this.losMensajes != undefined){
+      let creacion = {
+        rut: this.mensaje.controls.rutX.value,
+        message: this.mensaje.controls.message.value,
+        id: this.largeMessage
+      }
+      await this.losMensajes.push(creacion);
+      this.messageChatEspecifico = {
+        rutX: this.emisorCond,
+        rutY: this.receptorPas,
+        messages: this.losMensajes
+    };
+    let chatEsp = {
+      chat: this.messageChatEspecifico
+    }
+    await this.fireStore.agregar("mensajes",chatEsp, 'o')
+    console.log(this.messageChatEspecifico);
+    } else {
+      this.losMensajes = [];
+      let creacion = {
+        rut: this.mensaje.controls.rutX.value,
+        message: this.mensaje.controls.message.value,
+        id: this.largeMessage
+      };
+      await this.losMensajes.push(creacion);
+      this.messageChatEspecifico= {
+        rutX: this.emisorCond,
+        rutY: this.receptorPas,
+        messages: this.losMensajes
+    };
+      let chatEsp = {
+        chat: this.messageChatEspecifico
+      }
+    await this.fireStore.agregar("mensajes",chatEsp, 'o')
+    console.log(this.messageChatEspecifico);
+    } */
+  }
+  async recargar(){
+    this.losMensajes = [];
+    await this.ngOnInit();
+    await this.cambiarChat(this.receptorPas, this.emisorCond);
+  }
 }
 
 

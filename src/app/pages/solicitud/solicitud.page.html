@@ -65,7 +65,19 @@
       src="https://img.freepik.com/vector-premium/banner-sello-cancelado-rojo-sobre-fondo-transparente-diseno-eps-textura-grunge-diseno-vectorial_123447-3282.jpg"
       alt="">
   </div>
+  <div class="fondo-qr" *ngIf="template ==5">
+    <div class="qr">
+      <ngx-qrcode [elementType]="elementType" [value]="value_qr">
+      </ngx-qrcode>
+    </div>
+    <div class="volver">
+      <p>{{mostrar_qr}}</p>
+      <ion-button (click)="volverMenu()">
+        Volver
+      </ion-button>
+    </div>
 
+  </div><!--  -->
   <div class="fondo-chat" *ngIf="template == 6">
     <h1>Resuelve tus dudas</h1>
     <div class="sepLista">

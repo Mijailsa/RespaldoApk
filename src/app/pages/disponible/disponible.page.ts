@@ -210,7 +210,7 @@ export class DisponiblePage implements OnInit {
       if (this.idViajes == value.id) {
         var nuevaCapacidad = value.capacidad - 1;
 
-        if (nuevaCapacidad > 0) {
+        if (nuevaCapacidad >= 0) {
 
           this.solicitud = [...value.pasajeros];
           this.solicitud.push(user);

@@ -118,9 +118,17 @@ export class DisponiblePage implements OnInit {
           );
         });
       }
+
     );
     await this.TraerApi();
-    await this.cargarDatoMensaje();
+    await this.fireStore.getDatos("mensajes").subscribe(
+      data => {
+        for (let mensaje of data) {
+          let message = mensaje.payload.doc.data();
+          this.messages.push(message);
+        }
+      }
+    );
     return true;
   }
   async cargarDatoMensaje() {
@@ -133,6 +141,10 @@ export class DisponiblePage implements OnInit {
         }
       }
     );
+
+    await this.cambiarChat(this.receptorPas, this.emisorCond);
+    await this.cambiarChat(this.receptorPas, this.emisorCond);
+    await this.cambiarChat(this.receptorPas, this.emisorCond);
   }/*
   async cargarDatoMensajes(rutPas, idSesion) {
 
@@ -426,8 +438,7 @@ export class DisponiblePage implements OnInit {
   }
   async recargarChat() {
     this.losMensajes = [];
-
-    await this.ngOnInit();
+    await this.cargarDatoMensaje();
 
   }
 }

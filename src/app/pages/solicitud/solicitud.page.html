@@ -67,7 +67,7 @@
   </div>
 
   <div class="fondo-chat" *ngIf="template == 6">
-    <h1>Consulta</h1>
+    <h1>Resuelve tus dudas</h1>
     <div class="sepLista">
       <div *ngIf="losMensajes != undefined" class="mensajesListas">
         <div *ngFor="let aux of losMensajes; let i = index" [attr.data-index]="i" class="mensajesLista">
@@ -97,16 +97,13 @@
           </ion-item>
 
           <ion-button type="button" (click)="volverMenu()">
-            Volver
-            <ion-icon name="send-outline"></ion-icon>
+            <ion-icon name="chevron-back-circle-outline"></ion-icon>
           </ion-button>
           <ion-button type="button" (click)="recargar()">
-            Refrescar
-            <ion-icon name="refresh-outline"></ion-icon>
+            <ion-icon name="refresh-circle-outline"></ion-icon>
           </ion-button>
           <ion-button type="submit">
-            Enviar
-            <ion-icon name="send-outline"></ion-icon>
+            <ion-icon name="chevron-forward-circle-outline"></ion-icon>
           </ion-button>
 
         </form>

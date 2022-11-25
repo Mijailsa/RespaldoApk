@@ -47,7 +47,7 @@ export class DisponiblePage implements OnInit {
   datos: any;
   ///
   api: any;
-  precio:any;
+  precio: any;
   dolar: any;
   /* waypoints = WayPoint [] = */  /* DESCOMENTAR CUANDO SE CARGUEN EN LOS WAYPOINTS PARA TRAZAR LA RUTA DE LOS OTROS VIAJES INTEGRANDO EL LOCALSTORAGE SEGUN DONDE VAN LOS PASAJEROS */
   ubicacionDuoc = { lat: 0, lng: 0 };
@@ -55,22 +55,22 @@ export class DisponiblePage implements OnInit {
   KEY: any = "viajes";
 
 
- /* Métodos chat */
- receptorPas: any;
- emisorCond: any;
- largeMessage: any;
- messages: any = [];
- losMensajes: any = [];
- messageChatEspecifico: any = {
-   rutX: '',
-   rutY: '',
-   messages: [
-     {
-       rut: '',
-       message: ''
-     }
-   ]
- }
+  /* Métodos chat */
+  receptorPas: any;
+  emisorCond: any;
+  largeMessage: any;
+  messages: any = [];
+  losMensajes: any = [];
+  messageChatEspecifico: any = {
+    rutX: '',
+    rutY: '',
+    messages: [
+      {
+        rut: '',
+        message: ''
+      }
+    ]
+  }
 
   /* métodos disponible */
   async ngOnInit() {
@@ -123,7 +123,7 @@ export class DisponiblePage implements OnInit {
     await this.cargarDatoMensaje();
     return true;
   }
-  async cargarDatoMensaje(){
+  async cargarDatoMensaje() {
 
     await this.fireStore.getDatos("mensajes").subscribe(
       data => {
@@ -133,8 +133,8 @@ export class DisponiblePage implements OnInit {
         }
       }
     );
-  }
-  async cargarDatoMensajes(rutPas, idSesion){
+  }/*
+  async cargarDatoMensajes(rutPas, idSesion) {
 
     await this.fireStore.getDatos("mensajes").subscribe(
       data => {
@@ -142,10 +142,13 @@ export class DisponiblePage implements OnInit {
           let message = mensaje.payload.doc.data();
           this.messages.push(message);
         }
+
       }
+
     );
-    await this.cambiarChat(rutPas, idSesion);
-  }
+
+
+  } */
 
 
   async irDetalle(rut) {
@@ -195,29 +198,29 @@ export class DisponiblePage implements OnInit {
       if (this.idViajes == value.id) {
         var nuevaCapacidad = value.capacidad - 1;
 
-        if (nuevaCapacidad >0) {
+        if (nuevaCapacidad > 0) {
 
           this.solicitud = [...value.pasajeros];
-        this.solicitud.push(user);
-        var creacion: any = {
-          id: value.id,
-          origen: value.origen,
-          destino: value.destino,
-          precio: value.precio,
-          salida: value.salida,
-          iniciado: value.iniciado,
-          rut_conductor: value.rut_conductor,
-          capacidad: nuevaCapacidad,
-          pasajeros: this.solicitud,
-        };
-        await this.storage.actualizar(this.KEY_VIAJE, creacion);
-        await this.recargar();
-        this.template = 1;
-        this.titulo = "Viaje Solicitado";
-        var alerta = "Viaje Solicitado";
-        await this.toastError(alerta);
+          this.solicitud.push(user);
+          var creacion: any = {
+            id: value.id,
+            origen: value.origen,
+            destino: value.destino,
+            precio: value.precio,
+            salida: value.salida,
+            iniciado: value.iniciado,
+            rut_conductor: value.rut_conductor,
+            capacidad: nuevaCapacidad,
+            pasajeros: this.solicitud,
+          };
+          await this.storage.actualizar(this.KEY_VIAJE, creacion);
+          await this.recargar();
+          this.template = 1;
+          this.titulo = "Viaje Solicitado";
+          var alerta = "Viaje Solicitado";
+          await this.toastError(alerta);
 
-        }else{
+        } else {
           var error = 'Viaje sin capacidad'
           this.toastError(error)
           return;
@@ -269,9 +272,9 @@ export class DisponiblePage implements OnInit {
   }
   async recargar() {
     this.usuario = [];
-        this.usuarios = [];
-        this.viajes = [];
-        this.total = [];
+    this.usuarios = [];
+    this.viajes = [];
+    this.total = [];
   }
   async dibujarMapa() {
     var map: HTMLElement = document.getElementById('map');
@@ -347,7 +350,7 @@ export class DisponiblePage implements OnInit {
   async calcularDolar(precio) {
 
     var dolar = this.api
-    this.dolar =  (precio / dolar).toFixed(2)
+    this.dolar = (precio / dolar).toFixed(2)
 
     console.log(precio)
     console.log(this.dolar)
@@ -380,23 +383,24 @@ export class DisponiblePage implements OnInit {
       }
     });
     console.log("troleo xdxdxd")
-      this.messageChatEspecifico = {
-        rutX: idSesion,
-        rutY: rutPas,
-        messages: [
-          {
-            rut: 'default',
-            message: 'default'
-          }
-        ]
-      };
-      this.template = 6;
-      this.largeMessage = 1;
-      let chatEsp = {
-        chat: this.messageChatEspecifico
-      }
-      let idDoc = idSesion + "" + rutPas;
-      this.fireStore.agregar("mensajes", chatEsp, idDoc);
+    this.template = 6;
+    /* this.messageChatEspecifico = {
+      rutX: idSesion,
+      rutY: rutPas,
+      messages: [
+        {
+          rut: 'default',
+          message: 'default'
+        }
+      ]
+    };
+    this.template = 6;
+    this.largeMessage = 1;
+    let chatEsp = {
+      chat: this.messageChatEspecifico
+    }
+    let idDoc = idSesion + "" + rutPas;
+    this.fireStore.agregar("mensajes", chatEsp, idDoc); */
 
   }
   async enviarMensaje() {
@@ -419,51 +423,11 @@ export class DisponiblePage implements OnInit {
     };
     await this.fireStore.modificar("mensajes", idDoc, chatEsp);
     await this.mensaje.reset();
-    /* this.mensaje.controls.rutX.setValue(this.emisorCond);
-    this.mensaje.controls.rutY.setValue(this.receptorPas);
-    this.mensaje.controls.id.setValue(this.largeMessage+1);
-    let id: string = "x"+this.mensaje.controls.rutX.value+''+this.mensaje.controls.rutY.value;
-    console.log(this.mensaje.controls.id.value+" "+this.mensaje.controls.rutX.value+" "+this.mensaje.controls.rutY.value+" "+this.mensaje.controls.message.value);
-    if(this.losMensajes != undefined){
-      let creacion = {
-        rut: this.mensaje.controls.rutX.value,
-        message: this.mensaje.controls.message.value,
-        id: this.largeMessage
-      }
-      await this.losMensajes.push(creacion);
-      this.messageChatEspecifico = {
-        rutX: this.emisorCond,
-        rutY: this.receptorPas,
-        messages: this.losMensajes
-    };
-    let chatEsp = {
-      chat: this.messageChatEspecifico
-    }
-    await this.fireStore.agregar("mensajes",chatEsp, 'o')
-    console.log(this.messageChatEspecifico);
-    } else {
-      this.losMensajes = [];
-      let creacion = {
-        rut: this.mensaje.controls.rutX.value,
-        message: this.mensaje.controls.message.value,
-        id: this.largeMessage
-      };
-      await this.losMensajes.push(creacion);
-      this.messageChatEspecifico= {
-        rutX: this.emisorCond,
-        rutY: this.receptorPas,
-        messages: this.losMensajes
-    };
-      let chatEsp = {
-        chat: this.messageChatEspecifico
-      }
-    await this.fireStore.agregar("mensajes",chatEsp, 'o')
-    console.log(this.messageChatEspecifico);
-    } */
   }
-  async recargarChat(){
+  async recargarChat() {
     this.losMensajes = [];
-    await this.cargarDatoMensajes(this.receptorPas, this.emisorCond);
+
+    await this.ngOnInit();
 
   }
 }

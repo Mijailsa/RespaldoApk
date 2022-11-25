@@ -249,24 +249,7 @@ export class SolicitudPage implements OnInit {
         return;
       }
     });
-    console.log("troleo xdxdxd")
-      this.messageChatEspecifico = {
-        rutX: idSesion,
-        rutY: rutPas,
-        messages: [
-          {
-            rut: 'default',
-            message: 'default'
-          }
-        ]
-      };
       this.template = 6;
-      this.largeMessage = 1;
-      let chatEsp = {
-        chat: this.messageChatEspecifico
-      }
-      let idDoc = idSesion + "" + rutPas;
-      this.fireStore.agregar("mensajes", chatEsp, idDoc);
 
   }
   async enviarMensaje() {

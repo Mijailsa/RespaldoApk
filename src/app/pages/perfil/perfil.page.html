@@ -159,11 +159,11 @@
                       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" style="height:30vh;">
                       <ion-card-header>
                         <ion-card-subtitle class="seg_subtitulo">{{sesion.nombre}} {{sesion.apellido}}</ion-card-subtitle>
-                        <ion-card-title class="fuentes_datos">Cantidad viajes</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
-                        <p class="fuentes_datos">Cantidad viajes tomados: 5</p>
-                        <p class="fuentes_datos">Fecha último viaje: 09/09/2009</p>
+                        <ion-button (click)="chargeHome()">
+                            Recargar
+                        </ion-button>
                       </ion-card-content>
                     </ion-card>
                   </div>

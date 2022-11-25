@@ -39,12 +39,12 @@ export class PerfilPage implements OnInit {
   carro = new FormGroup(
     {
       patente: new FormControl('',[Validators.required, Validators.maxLength(6), Validators.minLength(5)]),
-      pasajeros: new FormControl('',[Validators.required,Validators.min(1),Validators.minLength(1),Validators.pattern("[0-9]")]),
+      pasajeros: new FormControl('',[Validators.required,Validators.min(1),Validators.pattern("[0-9]{1,9}")]),
       modelo: new FormControl('',[Validators.required]),
       marca: new FormControl('',[Validators.required]),
       imagen: new FormControl('',[Validators.required]),
       dueno: new FormControl(this.sesion.rut),
-      anio: new FormControl('',[Validators.pattern('[0-9]'),Validators.minLength(1)])
+      anio: new FormControl('',[Validators.pattern('[0-9]{4}'),Validators.min(1)])
     }
   );
   KEY = "usuarios";
@@ -126,5 +126,8 @@ export class PerfilPage implements OnInit {
     });
     toast.present();
 
+  }
+  async chargeHome(){
+    await this.home.ngOnInit();
   }
 }

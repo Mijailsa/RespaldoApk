@@ -188,7 +188,7 @@ export class NuevoviajePage implements OnInit {
 
     var guardar = await this.storage.agregarViaje(this.KEY_VIAJES, this.viaje.value, this.viaje.controls.id.value);
     if (guardar == true) {
-      await this.homePage.recargar(this.viaje.controls.id.value);
+      await this.homePage.ngOnInit();
       this.viaje.reset();
       this.alert='¡VIAJE CREADO! Espera a que te lleguen solicitudes';
       this.toastError(this.alert);

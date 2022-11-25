@@ -7,6 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { ToastController } from '@ionic/angular';
 import { v4 } from 'uuid';
 import { FireService } from 'src/app/services/fire.service';
+import { HomePage } from '../home/home.page';
 
 declare var google;
 
@@ -58,7 +59,7 @@ export class SolicitudPage implements OnInit {
   }
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService
-    , private router: Router, private toastController: ToastController, private fireStore: FireService) { }
+    , private router: Router, private toastController: ToastController, private fireStore: FireService, private home: HomePage) { }
 
   async ngOnInit() {
     let rut = this.route.snapshot.paramMap.get('rut');
@@ -153,8 +154,8 @@ export class SolicitudPage implements OnInit {
     this.template = num;
     var alerta = "Viaje eliminado";
     await this.toastError(alerta);
+    await this.home.ngOnInit();
   }
-
 
 
   mapa: any;

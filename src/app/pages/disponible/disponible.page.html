@@ -70,6 +70,9 @@
           Solicitar
           <ion-icon name="enter-outline" slot="end"></ion-icon>
         </ion-button>
+        <ion-button (click)="cambiarChat(receptorPas, detalle.precios.rut_conductor)">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </ion-button>
       </div>
     </div>
   </div>
@@ -87,6 +90,53 @@
         Volver
         <ion-icon name="play-back-outline" slot="end"></ion-icon>
       </ion-button>
+    </div>
+  </div>
+  <div class="fondo-chat" *ngIf="template == 6">
+    <h1>Resuelve tus dudas</h1>
+    <div class="sepLista">
+      <div *ngIf="losMensajes != undefined" class="mensajesListas">
+        <div *ngFor="let aux of losMensajes; let i = index" [attr.data-index]="i" class="mensajesLista">
+          <ion-row *ngIf="aux['rut']==emisorCond">
+            <ion-col size="3" class="yoListaU">
+              {{aux['rut']}} :
+            </ion-col>
+            <ion-col size="9" class="yoLista">
+              {{aux['message']}}
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="aux['rut']==receptorPas">
+            <ion-col size="9" class="tuListaU">
+              {{aux['message']}}
+            </ion-col>
+            <ion-col size="3" class="tuLista">
+              : {{aux['rut']}}
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+      <div class="formularioChat">
+        <form [formGroup]="mensaje" (ngSubmit)="enviarMensaje()">
+          <ion-item>
+            <ion-label>Mensaje: </ion-label>
+            <ion-input type="text" placeholder="Escribe tu consulta" formControlName="message"></ion-input>
+          </ion-item>
+
+          <ion-button type="button" (click)="volverMenu()">
+
+            <ion-icon name="chevron-back-circle-outline"></ion-icon>
+          </ion-button>
+          <ion-button type="button" (click)="recargarChat()">
+
+            <ion-icon name="refresh-circle-outline"></ion-icon>
+          </ion-button>
+          <ion-button type="submit">
+
+            <ion-icon name="chevron-forward-circle-outline"></ion-icon>
+          </ion-button>
+
+        </form>
+      </div>
     </div>
   </div>
 </ion-content>

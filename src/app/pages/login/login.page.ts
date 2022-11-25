@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   rut: string;
   password: string;
   nuevorut: string;
-  objectValidar = [];
+  objectValidar:any [] = [];
   constructor(private toastController: ToastController, private router: Router,
     private usuarioService: UsuarioService, private route: ActivatedRoute, private navCtrl: NavController,
     private storage: StorageService, private loading: LoadingController, private fireStore: FireService) { }
@@ -27,6 +27,7 @@ export class LoginPage implements OnInit {
 
     await this.fireStore.getDatos(this.KEY).subscribe(
       data => {
+        this.objectValidar = [];
         for (let usuario of data) {
           let usu = usuario.payload.doc.data();
           usu['id'] = usuario.payload.doc.id;
@@ -38,6 +39,7 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
+   
     await this.storage.validarLogin(this.KEY, this.rut, this.password);
     var login = await this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
     if (login != undefined) {

@@ -106,6 +106,7 @@ export class SolicitudPage implements OnInit {
     var nuevoQr = this.usuario;
     this.value_qr = nuevoQr.rut;
     this.mostrar_qr = nuevoQr.rut;
+    console.log(this.mostrar_qr)
     this.template = 5;
   }
 

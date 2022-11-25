@@ -74,7 +74,7 @@ export class DisponiblePage implements OnInit {
 
   /* métodos disponible */
   async ngOnInit() {
-
+    this.total = [];
     this.usuario = [];
     this.usuarios = [];
     this.viajes = [];
@@ -99,7 +99,7 @@ export class DisponiblePage implements OnInit {
     )
     await this.fireStore.getDatos(this.KEY).subscribe(
       data => {
-        this.total = [];
+        
         for (let viaje of data) {
           let travel = viaje.payload.doc.data();
           this.viajes.push(travel);
@@ -276,7 +276,7 @@ export class DisponiblePage implements OnInit {
         this.titulo = "Viaje Solicitado";
         var alerta = "Viaje Solicitado";
         await this.toastError(alerta);
-        await this.recargar();
+        
       }
     });
 

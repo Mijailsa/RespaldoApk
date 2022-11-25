@@ -1,4 +1,4 @@
-.fondo-leer{
+.fondo-leer {
   box-shadow: none;
   height: 100vh;
   background: transparentize($color: #f0e658bd, $amount: 0.3);
@@ -12,13 +12,12 @@
   ion-item {
     margin-top: 12.5vh;
     --background: none;
-    ion-input{
-        font-family: 'Lobster';
-        color: rgba(4, 4, 43, 0.904);
+    ion-input {
+      font-family: "Lobster";
+      color: rgba(4, 4, 43, 0.904);
     }
-
-}
-  .botones-qr{
+  }
+  .botones-qr {
     margin-top: 10vh;
     ion-button {
       color: rgba(4, 4, 43, 0.904);
@@ -29,8 +28,6 @@
       font-weight: bold;
     }
   }
-
-
 }
 
 .fondo-chat {
@@ -46,10 +43,10 @@
   justify-content: space-around;
   font-family: "Montserrat";
   overflow: hidden;
-  h1{
+  h1 {
     margin-top: 2.5vh;
     color: white;
-    font-family: 'Lobster';
+    font-family: "Lobster";
   }
   .sepLista {
     margin-top: 0.5vh;
@@ -131,6 +128,23 @@
   justify-content: space-around;
   font-family: "Montserrat";
   overflow: scroll;
+  .botonAbsoluto {
+    position: fixed;
+    z-index: 2;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+    margin-left: 20%;
+    margin-top: 120%;
+    width: 60%;
+    ion-button{
+      color: rgba(255, 255, 255, 0.904);
+      font-family: "Montserrat";
+      font-weight: bold;
+      --background: black;
+    }
+  }
   .dolar {
     margin-top: 1vh;
     font-family: Lobster;

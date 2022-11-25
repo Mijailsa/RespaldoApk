@@ -1,15 +1,16 @@
 <ion-content>
   <div class="fondo" *ngIf="template == 1">
     <h1 class="titulo">{{titulo}}</h1>
-    <h5 class = "dolar"> Valor Dolar del día: {{api}}</h5>
-    <ion-button size="default" (click)="irQr()">
-      Leer Qr
-      <ion-icon name="qr-code-outline"></ion-icon>
-    </ion-button>
-    <ion-button size="default" (click)="ngOnInit()">
-      Refrescar
-      <ion-icon name="refresh-circle-outline"></ion-icon>
-    </ion-button>
+    <h5 class="dolar"> Valor Dolar del día: {{api}}</h5>
+    <div  class="botonAbsoluto">
+      <ion-button size="default" (click)="irQr()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </ion-button>
+      <ion-button size="default" (click)="ngOnInit()">
+        <ion-icon name="refresh-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
+
     <ion-list lines="none" id="lista" *ngFor="let aux of total">
       <ion-item class="item">
         <div>
@@ -27,7 +28,7 @@
         <h3>Marca: {{aux.dato.vehiculo.marca}} {{aux.dato.vehiculo.modelo}}</h3>
       </ion-item>
       <ion-item class="item">
-        <h5 id="precio">Precio: $ {{aux.precios.precio}}   </h5>
+        <h5 id="precio">Precio: $ {{aux.precios.precio}} </h5>
       </ion-item>
     </ion-list>
 
@@ -54,7 +55,9 @@
         <div>DISPONIBLE: Sin cupo</div>
       </ion-item>
       <ion-item>
-        <div><p>PRECIO: $ {{detalle.precios.precio}} pesos  o  $ {{dolar}} dólares.</p> </div>
+        <div>
+          <p>PRECIO: $ {{detalle.precios.precio}} pesos o $ {{dolar}} dólares.</p>
+        </div>
       </ion-item>
       <ion-item>
         <div>HORA SALIDA: {{detalle.precios.salida}} horas</div>

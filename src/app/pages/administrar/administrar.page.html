@@ -80,7 +80,7 @@
                   <ion-item>
                     <ion-label>Repita Contraseña :</ion-label>
                     <ion-input type="password" placeholder="Ingrese nuevamente contraseña"
-                      [(ngModel)]="verificar_password" [ngModelOptions]="{standalone: 'true'}"></ion-input>
+                      [(ngModel)]="verificar_password" [ngModelOptions]="{standalone: true}"></ion-input>
                   </ion-item>
                   <ion-button type="submit" [disabled]="!alumno.valid">REGISTRAR</ion-button>
                 </form>
@@ -145,7 +145,7 @@
                     <ion-item>
                       <ion-label>Repita Contraseña :</ion-label>
                       <ion-input type="password" placeholder="Ingrese nuevamente contraseña"
-                        [(ngModel)]="verificar_password" [ngModelOptions]="{standalone: 'true'}"></ion-input>
+                        [(ngModel)]="verificar_password" [ngModelOptions]="{standalone: true}"></ion-input>
                     </ion-item>
                     <ion-button type="submit" [disabled]="!alumno.valid">MODIFICAR</ion-button>
                   </form>

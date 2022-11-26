@@ -66,10 +66,10 @@
       alt="">
   </div>
   <div class="fondo-qr" *ngIf="template ==5">
-    <div class="qr">
-      <!--<ngx-qrcode [elementType]="elementType" [value]="value_qr">
-      </ngx-qrcode>-->
-      <img src="https://borealtech.com/wp-content/uploads/2018/10/codigo-qr-1024x1024-1.jpg" width="250px" height="250px">
+    <div class="qr" style="width:250px;height:250px;margin-top:10vh;">
+      <ngx-qrcode [elementType]="elementType" [value]="value_qr" >
+      </ngx-qrcode>
+      <!--<img src="https://borealtech.com/wp-content/uploads/2018/10/codigo-qr-1024x1024-1.jpg" width="250px" height="250px">-->
     </div>
     <div class="volver">
       <p>{{mostrar_qr}}</p>

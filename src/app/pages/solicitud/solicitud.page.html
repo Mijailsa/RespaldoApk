@@ -66,16 +66,31 @@
       alt="">
   </div>
   <div class="fondo-qr" *ngIf="template ==5">
-    <div class="qr">
-      <ngx-qrcode [elementType]="elementType" [value]="value_qr">
-      </ngx-qrcode>
-    </div>
-    <div class="volver">
-      <p>{{mostrar_qr}}</p>
-      <ion-button (click)="volverMenu()">
-        Volver
-      </ion-button>
-    </div>
+    <ion-row>
+      <ion-col size="5"></ion-col>
+      <ion-col>
+        <div class="qr">
+          <ngx-qrcode [elementType]="elementType" [value]="value_qr">
+          </ngx-qrcode>
+          <!--<img src="https://borealtech.com/wp-content/uploads/2018/10/codigo-qr-1024x1024-1.jpg" width="250px" height="250px">-->
+        </div>
+      </ion-col>
+      <ion-col size="5">
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="volver">
+          <p>{{mostrar_qr}}</p>
+          <ion-button (click)="volverMenu()">
+            Volver
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
 
   </div>
 

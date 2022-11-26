@@ -8,6 +8,7 @@ import { ToastController } from '@ionic/angular';
 import { v4 } from 'uuid';
 import { FireService } from 'src/app/services/fire.service';
 import { HomePage } from '../home/home.page';
+import { NgxQrcodeElementTypes, NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 declare var google;
 
@@ -38,7 +39,7 @@ export class SolicitudPage implements OnInit {
   template = 1;
   detalleViaje: any = [];
 
-  elementType = 'canvas';
+  elementType = NgxQrcodeElementTypes.CANVAS;
   value_qr = 'www.google.cl';
   mostrar_qr: any;
 

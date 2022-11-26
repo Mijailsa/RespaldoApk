@@ -22,11 +22,11 @@ export class NuevoviajePage implements OnInit {
     id: new FormControl(v4()),
     origen: new FormControl(''),
     destino: new FormControl(''),
-    precio: new FormControl(''),
-    salida: new FormControl(''),
+    precio: new FormControl('',Validators.required),
+    salida: new FormControl('',Validators.required),
     iniciado: new FormControl('0'),
     rut_conductor: new FormControl(''),
-    capacidad: new FormControl(''),
+    capacidad: new FormControl('',),
     pasajeros: new FormControl('sin')
   });
 

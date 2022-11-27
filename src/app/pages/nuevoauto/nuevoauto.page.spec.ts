@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 
 import { NuevoautoPage } from './nuevoauto.page';
 
@@ -10,7 +9,8 @@ describe('PRUEBAS UNITARIAS: Nuevo Auto ', ()=>{
         await TestBed.configureTestingModule({
           imports: [
             ReactiveFormsModule,
-            FormsModule
+            FormsModule,
+            
           ],
           declarations: [
             NuevoautoPage

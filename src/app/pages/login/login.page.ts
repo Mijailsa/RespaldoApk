@@ -14,6 +14,12 @@ import { async } from '@angular/core/testing';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  /*  Variables para pruebas  */
+  validarPruebas: any;
+
+
+
+  /*  Variables para page  */
   KEY = "usuarios";
   rut: string;
   password: string;
@@ -42,13 +48,16 @@ export class LoginPage implements OnInit {
    
     await this.storage.validarLogin(this.KEY, this.rut, this.password);
     var login = await this.objectValidar.find(usu => usu.rut == this.rut && usu.password == this.password);
+    this.validarPruebas = login;
     if (login != undefined) {
+      this.validarPruebas = true;
       await this.cargarPantalla();
       this.nuevorut = this.rut;
       this.password = '';
       this.rut = '';
       this.navCtrl.navigateForward(['/home/', this.nuevorut,login.id]);
     } else {
+      this.validarPruebas = false;
       await this.toastError();
     }
   }

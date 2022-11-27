@@ -14,6 +14,10 @@ import { FireService } from 'src/app/services/fire.service';
   styleUrls: ['./administrar.page.scss'],
 })
 export class AdministrarPage implements OnInit {
+  /* Variables Validar Pruebas  */
+  validarPruebas: any;
+
+  /* Variables function */
   alumno = new FormGroup({
     id: new FormControl(''),
     rut: new FormControl('', [Validators.required, Validators.pattern('[0-9]{7,8}-[0-9kK]{1}')]),
@@ -76,6 +80,7 @@ export class AdministrarPage implements OnInit {
     await this.esperaEvento();
   }
   irRegistrar(){
+    this.validarPruebas = true;
     this.variable = "Registrar Usuario";
     this.listado = undefined;
     this.modificar = undefined;
@@ -83,6 +88,7 @@ export class AdministrarPage implements OnInit {
     this.registrar = 1;
   }
   async irListar(){
+    this.validarPruebas = true;
     this.variable = "Listar Usuarios";
     this.registrar = undefined;
     this.eliminar = undefined;
@@ -90,6 +96,7 @@ export class AdministrarPage implements OnInit {
     this.listado = this.datos;
   }
   irModificar(){
+    this.validarPruebas = true;
     this.variable = "Modificar Usuario";
     this.listado = undefined;
     this.modificar = 1;
@@ -97,6 +104,7 @@ export class AdministrarPage implements OnInit {
     this.registrar = undefined;
   }
   irEliminar(){
+    this.validarPruebas = true;
     this.variable = "Eliminar Usuario";
     this.listado = undefined;
     this.modificar = undefined;
@@ -105,6 +113,7 @@ export class AdministrarPage implements OnInit {
   }
 
   async registrarAdmin(){
+    this.validarPruebas = true;
     let existe = await this.datos.find(usu => usu['rut'] == this.alumno.controls.rut.value);
     const now = new Date();
     let anioActual = now.getFullYear();
@@ -141,6 +150,7 @@ export class AdministrarPage implements OnInit {
     }
 
   async eliminarAdmin(){
+    this.validarPruebas = true;
     if(this.sesion.rut == this.alumno.controls.rut.value){
       var alerta ='¡NO TE PUEDES ELIMINAR A TI MISMO!';
       await this.toastError(alerta);
@@ -153,13 +163,14 @@ export class AdministrarPage implements OnInit {
 
   }
   async buscarAdmin(){
+    this.validarPruebas = true;
     this.usuario_buscado = await this.datos.find(dato => dato.rut == this.alumno.controls.rut.value);
     this.modificar = 2;
     this.identificable = this.usuario_buscado.id;
     return this.usuario_buscado;
   }
   async modificarAdmin(){
-
+    this.validarPruebas = true;
     const now = new Date();
     let anioActual = now.getFullYear();
     const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);

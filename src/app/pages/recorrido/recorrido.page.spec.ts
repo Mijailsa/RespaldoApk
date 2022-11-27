@@ -1,15 +1,18 @@
-import { TestBed } from "@angular/core/testing";
+/* import { TestBed } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { RecorridoPage } from "./recorrido.page";
 
 
-describe('PRUEBAS UNITARIAS: registro ', ()=>{
+describe('PRUEBAS UNITARIAS: Recorrido ', ()=>{
 // Configuracion ambiente de las pruebas:
   beforeEach ( async ()=> {
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        RouterTestingModule
       ],
       declarations: [
         RecorridoPage
@@ -23,4 +26,4 @@ describe('PRUEBAS UNITARIAS: registro ', ()=>{
     expect(app).toBeTruthy();
 
   });
-});
+}); */

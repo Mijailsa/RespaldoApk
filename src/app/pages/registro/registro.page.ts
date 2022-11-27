@@ -12,6 +12,11 @@ import { FireService } from 'src/app/services/fire.service';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage implements OnInit {
+  /* VARIABLES PARA PRUEBAS */
+  validarPruebas: any;
+
+
+
 
   alumno = new FormGroup({
     id: new FormControl(''),
@@ -68,21 +73,25 @@ export class RegistroPage implements OnInit {
     if (!this.usuarioService.validarRut(this.alumno.controls.rut.value)) {
       this.alert = '¡RUT INCORRECTO!';
       await this.toastError(this.alert);
+      this.validarPruebas = false;
       return;
     }
     if (resta < 17) {
       this.alert = '¡MAYOR DE 17 AÑOS!';
       await this.toastError(this.alert);
+      this.validarPruebas = false;
       return;
     }
     if (this.alumno.controls.password.value != this.verificar_password) {
       this.alert = '¡CONTRASEÑAS NO COINCIDEN!';
       await this.toastError(this.alert);
+      this.validarPruebas = false;
       return;
     }
     if(correoNotRepeat != undefined){
       this.alert = '¡EL CORREO YA EXISTE!';
       await this.toastError(this.alert);
+      this.validarPruebas = false;
       return;
     }
     this.alumno.controls.id.setValue(v4());

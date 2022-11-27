@@ -14,7 +14,10 @@ import { FireService } from 'src/app/services/fire.service';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
+  /* Variables Validar Pruebas */
+  validarPruebas: any;
 
+/* Variables page */
   constructor(private route: ActivatedRoute, private usuarioService: UsuarioService, private storage: StorageService,
     private toastController: ToastController, private home : HomePage, private fireStore: FireService) { }
     selectedFiles: FileList;
@@ -67,20 +70,25 @@ export class PerfilPage implements OnInit {
   valorPerfil(num) {
     var numero = num;
     if (numero == 1) {
+      this.validarPruebas = 1;
       this.default = 1;
     }
     else if (numero == 2) {
+      this.validarPruebas = 2;
       this.default = 2;
     }
     else if (numero == 3) {
+      this.validarPruebas = 3;
       this.default = 3;
     }
     else {
+      this.validarPruebas = 0;
       this.default = undefined;
     }
   }
   async modificar(num) {
     if (num == 1) {
+      this.validarPruebas = 1;
       const now = new Date();
       let anioActual = now.getFullYear();
       const nacUsuario = new Date(this.alumno.controls.fecha_nac.value);
@@ -89,12 +97,14 @@ export class PerfilPage implements OnInit {
       if (resta < 17) {
         var alerta = "¡MAYOR DE 17 AÑOS!";
         await this.toastError(alerta);
+        this.validarPruebas = false;
         return;
 
       }
       if (this.alumno.controls.password.value != this.verificar_password) {
         var alerta = "¡CONTRASEÑAS NO COINCIDEN!";
         await this.toastError(alerta);
+        this.validarPruebas = false;
         return;
       }
       this.alumno.controls.id.setValue(this.sesion.id);
@@ -143,6 +153,7 @@ export class PerfilPage implements OnInit {
 
   }
   async chargeHome(){
+    this.validarPruebas = true;
     await this.home.ngOnInit();
   }
 
